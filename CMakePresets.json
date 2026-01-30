@@ -20,7 +20,7 @@
       "cacheVariables": {
         "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/External/vcpkg/scripts/buildsystems/vcpkg.cmake",
         "VCPKG_TARGET_TRIPLET": "x64-windows",
-        "PRO_PLATFORM": "MSVC"
+        "ATLAS_PLATFORM": "MSVC"
       },
       "architecture": {
         "value": "x64",
@@ -67,7 +67,7 @@
         "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/External/vcpkg/scripts/buildsystems/vcpkg.cmake",
         "VCPKG_HOST_TRIPLET": "x64-mingw-static",
         "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
-        "PRO_PLATFORM": "MinGW"
+        "ATLAS_PLATFORM": "MinGW"
       },
       "architecture": {
         "value": "x64",
