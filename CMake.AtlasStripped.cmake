@@ -7,7 +7,9 @@ list(FILTER ATLAS_SOURCES_STRIPPED EXCLUDE REGEX ".*(\\/|\\\\).Impl(\\/|\\\\).*"
 add_library(AtlasStripped STATIC)
 add_library(Atlas::Stripped ALIAS AtlasStripped)
 
-target_compile_features(AtlasStripped PUBLIC cxx_std_20)
+target_compile_features(AtlasStripped
+        PRIVATE   cxx_std_23
+        INTERFACE cxx_std_20)
 
 target_sources(AtlasStripped PUBLIC
         FILE_SET CXX_MODULES

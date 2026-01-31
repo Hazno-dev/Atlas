@@ -2,3 +2,4 @@
 
 export module Common;
 export import :Type;
+export import :Inline;

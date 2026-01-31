@@ -10,7 +10,9 @@ file(GLOB_RECURSE ATLAS_SOURCES_HEADERS CONFIGURE_DEPENDS
 add_library(Atlas SHARED)
 add_library(Atlas::Atlas ALIAS Atlas)
 
-target_compile_features(Atlas PUBLIC cxx_std_20)
+target_compile_features(Atlas
+        PRIVATE   cxx_std_23
+        INTERFACE cxx_std_20)
 
 target_sources(Atlas
         PRIVATE
@@ -37,3 +39,10 @@ find_package(spdlog QUIET CONFIG REQUIRED)
 target_link_libraries(Atlas PRIVATE spdlog::spdlog_header_only)
 
 target_precompile_headers(Atlas PRIVATE "Src/Precompiled/Macros.h")
+
+#add_library(unused_std_target STATIC)
+#target_sources(unused_std_target
+#        PRIVATE
+#        FILE_SET unused_files TYPE CXX_MODULES
+#        BASE_DIRS C:/msys64/clang64/share/libc++/v1
+#        FILES C:/msys64/clang64/share/libc++/v1/std.cppm C:/msys64/clang64/share/libc++/v1/std.compat.cppm)

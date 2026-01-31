@@ -1,9 +1,7 @@
 // Hazno - 2026
 
-module;
-#include <cstdint>
-
 export module Common:Type;
+import std;
 
 export using int8 = std::int8_t;
 export using uint8 = std::uint8_t;

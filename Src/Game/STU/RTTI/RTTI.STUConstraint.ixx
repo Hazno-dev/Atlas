@@ -1,5 +1,5 @@
 // Hazno - 2026
-export module Atlas.STU.RTTI:STUConstraint;
+export module Atlas.Game.STU.RTTI:STUConstraint;
 import Common;
 
 export namespace Atlas::STU
