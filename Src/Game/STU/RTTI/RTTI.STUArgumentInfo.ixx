@@ -19,37 +19,37 @@ export namespace Atlas::STU
      */
     struct STUArgumentInfo
     {
-        char* Name_str;
-        uint32 Hash;
-        int32 Offset;
-        STUConstraint* Constraint;
-        int32 Field18;
-        int32 Field1C;
-        int64 Field20;
-        int32 DoesntNeedResetValue;
-        int32 Field2C;
-        int64 Field30;
-        int64 DefaultValue; //Unconfirmed!
-        int64 Field40;
-        int64 Field48;
-        int32 Field50;
-        int32 Field54;
+        char* Name_str{};
+        uint32 Hash{};
+        int32 Offset{};
+        STUConstraint* Constraint{};
+        int32 Field18{};
+        int32 Field1C{};
+        int64 Field20{};
+        int32 DoesntNeedResetValue{};
+        int32 Field2C{};
+        int64 Field30{};
+        int64 DefaultValue{}; //Unconfirmed!
+        int64 Field40{};
+        int64 Field48{};
+        int32 Field50{};
+        int32 Field54{};
 
-        int64 Field58;
-        int64 Field60;
-        int64 Field68;
+        int64 Field58{};
+        int64 Field60{};
+        int64 Field68{};
 
-        int32 Field70;
-        int32 Field74;
-        int32 Field78;
-        int32 Field7C;
-        int32 Field80;
-        int32 Field84;
-        int32 Field88;
-        int32 Field8C;
+        int32 Field70{};
+        int32 Field74{};
+        int32 Field78{};
+        int32 Field7C{};
+        int32 Field80{};
+        int32 Field84{};
+        int32 Field88{};
+        int32 Field8C{};
 
-        int64 Field90;
-        int64 Field98;
+        int64 Field90{};
+        int64 Field98{};
     };
 
     ATLAS_VALIDATE_SIZE(STUArgumentInfo, 0xA0);
