@@ -7,6 +7,8 @@ file(GLOB_RECURSE ATLAS_SOURCES_IMPLS CONFIGURE_DEPENDS
 file(GLOB_RECURSE ATLAS_SOURCES_HEADERS CONFIGURE_DEPENDS
         "${CMAKE_CURRENT_SOURCE_DIR}/Src/*.h")
 
+list(FILTER ATLAS_SOURCES_HEADERS EXCLUDE REGEX ".*Src(\\/|\\\\)Precompiled(\\/|\\\\).*")
+
 add_library(Atlas SHARED)
 add_library(Atlas::Atlas ALIAS Atlas)
 
@@ -38,11 +40,4 @@ target_link_libraries(Atlas PRIVATE fmt::fmt-header-only)
 find_package(spdlog QUIET CONFIG REQUIRED)
 target_link_libraries(Atlas PRIVATE spdlog::spdlog_header_only)
 
-target_precompile_headers(Atlas PRIVATE "Src/Precompiled/Macros.h")
-
-#add_library(unused_std_target STATIC)
-#target_sources(unused_std_target
-#        PRIVATE
-#        FILE_SET unused_files TYPE CXX_MODULES
-#        BASE_DIRS C:/msys64/clang64/share/libc++/v1
-#        FILES C:/msys64/clang64/share/libc++/v1/std.cppm C:/msys64/clang64/share/libc++/v1/std.compat.cppm)
+atlas_apply_target_base(Atlas)

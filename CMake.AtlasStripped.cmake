@@ -15,3 +15,5 @@ target_sources(AtlasStripped PUBLIC
         FILE_SET CXX_MODULES
         BASE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/Src/Game"
         FILES ${ATLAS_SOURCES_STRIPPED})
+
+atlas_apply_target_base(AtlasStripped)

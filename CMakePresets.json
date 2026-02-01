@@ -10,7 +10,10 @@
     {
       "hidden": true,
       "name": "base",
-      "binaryDir": "${sourceDir}/Build/${presetName}"
+      "binaryDir": "${sourceDir}/Build/${presetName}",
+      "environment": {
+        "VCPKG_ROOT": "${sourceDir}/External/vcpkg"
+      }
     },
     {
       "hidden": true,
@@ -18,9 +21,8 @@
       "generator": "Visual Studio 17 2022",
       "inherits": "base",
       "cacheVariables": {
-        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/External/vcpkg/scripts/buildsystems/vcpkg.cmake",
-        "VCPKG_TARGET_TRIPLET": "x64-windows",
-        "ATLAS_PLATFORM": "MSVC"
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/CMake/Toolchains/MSVC.cmake",
+        "VCPKG_TARGET_TRIPLET": "x64-windows"
       },
       "architecture": {
         "value": "x64",
@@ -35,7 +37,6 @@
         }
       },
       "environment": {
-        "VCPKG_ROOT": "${sourceDir}/External/vcpkg",
         "VCPKG_DEFAULT_TRIPLET": "x64-windows-static",
         "PATH": "$env{VCPKG_ROOT}:$penv{PATH}"
       }
@@ -64,10 +65,9 @@
       "generator": "Ninja",
       "inherits": "base",
       "cacheVariables": {
-        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/External/vcpkg/scripts/buildsystems/vcpkg.cmake",
+        "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/CMake/Toolchains/Clang.cmake",
         "VCPKG_HOST_TRIPLET": "x64-mingw-static",
-        "VCPKG_TARGET_TRIPLET": "x64-mingw-static",
-        "ATLAS_PLATFORM": "MinGW"
+        "VCPKG_TARGET_TRIPLET": "x64-mingw-static"
       },
       "architecture": {
         "value": "x64",
@@ -82,7 +82,6 @@
         }
       },
       "environment": {
-        "VCPKG_ROOT": "${sourceDir}/External/vcpkg",
         "VCPKG_DEFAULT_TRIPLET": "x64-mingw-static",
         "VCPKG_KEEP_ENV_VARS": "PATH"
       }

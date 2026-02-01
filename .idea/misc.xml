@@ -6,7 +6,8 @@
   <component name="CMakeWorkspace" PROJECT_DIR="$PROJECT_DIR$" />
   <component name="CidrRootsConfiguration">
     <excludeRoots>
-      <file path="$PROJECT_DIR$/External" />
+      <file path="$PROJECT_DIR$/Build" />
+      <file path="$PROJECT_DIR$/External/vcpkg" />
     </excludeRoots>
   </component>
   <component name="WestSettings">{}</component>
