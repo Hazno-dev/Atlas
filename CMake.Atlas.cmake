@@ -8,24 +8,26 @@ file(GLOB_RECURSE ATLAS_SOURCES_HEADERS CONFIGURE_DEPENDS
         "${CMAKE_CURRENT_SOURCE_DIR}/Src/*.h")
 
 list(FILTER ATLAS_SOURCES_HEADERS EXCLUDE REGEX ".*Src(\\/|\\\\)Precompiled(\\/|\\\\).*")
+list(FILTER ATLAS_SOURCES_HEADERS EXCLUDE REGEX ".*(\\/|\\\\)Private(\\/|\\\\).*")
 
 add_library(Atlas SHARED)
 add_library(Atlas::Atlas ALIAS Atlas)
 
 target_compile_features(Atlas
-        PRIVATE   cxx_std_23
+        PRIVATE cxx_std_23
         INTERFACE cxx_std_20)
 
 target_sources(Atlas
-        PRIVATE
-        ${ATLAS_SOURCES_IMPLS}
+
         PUBLIC
         FILE_SET CXX_MODULES
         BASE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/Src/"
         FILES ${ATLAS_SOURCES_MODULES}
         FILE_SET HEADERS
         BASE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/Src/"
-        FILES ${ATLAS_SOURCES_HEADERS})
+        FILES ${ATLAS_SOURCES_HEADERS}
+        PRIVATE
+        ${ATLAS_SOURCES_IMPLS})
 
 target_include_directories(Atlas
         PUBLIC
