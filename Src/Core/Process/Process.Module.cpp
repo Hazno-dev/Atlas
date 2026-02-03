@@ -3,8 +3,8 @@
 module;
 
 module Atlas.Process;
-import Atlas.Common;
 import Atlas.Common.Platform;
+import Atlas.Common;
 import std.compat;
 
 using LdrRegisterDllNotification_t   = NTSTATUS(ATLAS_STDCALL*)(uint32 Flags, PVOID NotificationFunction, PVOID Context, PVOID* Cookie);
@@ -12,13 +12,13 @@ using LdrUnregisterDllNotification_t = NTSTATUS(ATLAS_STDCALL*)(PVOID Cookie);
 
 namespace Atlas::Process
 {
-	inline std::vector<Module> s_modules{};
+	static std::vector<Module> s_modules{};
 
-	inline std::atomic s_dirty{true};
-	inline PVOID s_cookie = nullptr;
+	static std::atomic s_dirty{true};
+	static PVOID s_cookie = nullptr;
 
-	inline std::optional<Module> s_programBounds{};
-	inline std::optional<Module> s_runtimeBounds{};
+	static std::optional<Module> s_programBounds{};
+	static std::optional<Module> s_runtimeBounds{};
 
 	uint64 Module::RVA(const uint64 absolute) const
 	{
@@ -163,4 +163,3 @@ namespace Atlas::Process
 		s_cookie = nullptr;
 	}
 }
-

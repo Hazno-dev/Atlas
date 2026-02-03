@@ -1,13 +1,14 @@
 // Hazno - 2026
 
 export module Atlas.Game.STU.RTTI:STUArgumentInfoView;
-import :STUInfoView;
-import :STUArgumentInfo;
 import Atlas.Common;
 import std;
 
-namespace Atlas::STU
+export namespace Atlas::STU
 {
+	struct STUArgumentInfo;
+	struct STUInfo;
+
 	struct STUArgumentInfoView
 	{
 		private:

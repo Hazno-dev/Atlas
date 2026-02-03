@@ -30,10 +30,10 @@ export namespace Atlas::STU
 		 * Get the singleton instance of the STURegistry list head.
 		 * @return Pointer to the first STURegistry in the linked list.
 		 */
-		[[nodiscard]] inline STURegistry* Get();
+		//[[nodiscard]] inline STURegistry* Get();
 		//[[nodiscard]] static STURegistry* Get(const Utility::Modules::ModuleBounds& module);
 
-		[[nodiscard]] STUInfo* GetSTUInfoByHash(uint32 hash) const;
+		//[[nodiscard]] STUInfo* GetSTUInfoByHash(uint32 hash) const;
 
 		[[nodiscard]] STURegistryView Range() const;
 	};
