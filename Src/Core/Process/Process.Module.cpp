@@ -2,15 +2,13 @@
 
 module;
 
-#include <windows.h>
-#include <tlhelp32.h>
-
 module Atlas.Process;
 import Atlas.Common;
+import Atlas.Common.Platform;
 import std.compat;
 
-using LdrRegisterDllNotification_t = NTSTATUS(NTAPI*)(_In_ ULONG Flags, _In_ PVOID NotificationFunction, _In_opt_ PVOID Context, _Out_ PVOID* Cookie);
-using LdrUnregisterDllNotification_t = NTSTATUS(NTAPI*)(_In_ PVOID Cookie);
+using LdrRegisterDllNotification_t   = NTSTATUS(ATLAS_STDCALL*)(uint32 Flags, PVOID NotificationFunction, PVOID Context, PVOID* Cookie);
+using LdrUnregisterDllNotification_t = NTSTATUS(ATLAS_STDCALL*)(PVOID Cookie);
 
 namespace Atlas::Process
 {
@@ -21,12 +19,6 @@ namespace Atlas::Process
 
 	inline std::optional<Module> s_programBounds{};
 	inline std::optional<Module> s_runtimeBounds{};
-
-	Module::Module(MODULEENTRY32 modEntry) :
-		m_base(reinterpret_cast<uint64>(modEntry.modBaseAddr)),
-		m_end(reinterpret_cast<uint64>(modEntry.modBaseAddr + modEntry.modBaseSize)),
-		m_size(static_cast<uint64>(modEntry.modBaseSize)),
-		m_name(modEntry.szModule) {}
 
 	uint64 Module::RVA(const uint64 absolute) const
 	{
@@ -47,7 +39,7 @@ namespace Atlas::Process
 		return res;
 	}
 
-	static void NTAPI DllNotify(ULONG reason, const void* data, void* ctx)
+	static void ATLAS_STDCALL DllNotify(uint32 reason, const void* data, void* ctx)
 	{
 		s_dirty.store(true, std::memory_order_relaxed);
 	}
@@ -60,9 +52,9 @@ namespace Atlas::Process
 
 		s_modules.clear();
 
-		const DWORD pid = GetCurrentProcessId();
-		const auto snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pid);
-		if (snap == INVALID_HANDLE_VALUE) {
+		const uint32 pid = GetCurrentProcessId();
+		const auto snap  = CreateToolhelp32Snapshot(TH32_SNAP_MODULE | TH32_SNAP_MODULE32, pid);
+		if (snap == SYS_INVALID_HANDLE_VALUE) {
 			printf("Invalid handle returned from snapshot in TryUpdateModules\n");
 			return;
 		}
@@ -76,8 +68,12 @@ namespace Atlas::Process
 			return;
 		}
 
+		auto mod = Module(reinterpret_cast<uint64>(me.modBaseAddr),
+		                  reinterpret_cast<uint64>(me.modBaseAddr + me.modBaseSize),
+		                  me.modBaseSize,
+		                  me.szModule);
 		do {
-			s_modules.emplace_back(me);
+			s_modules.emplace_back(mod);
 		}
 		while (Module32Next(snap, &me));
 
@@ -86,7 +82,7 @@ namespace Atlas::Process
 			return a.Base() < b.Base();
 		});
 
-		s_programBounds.emplace(*GetModuleForAddress(GetModuleHandleA(nullptr)));
+		s_programBounds.emplace(*GetModuleForAddress(GetModuleHandle(nullptr)));
 		s_runtimeBounds.emplace(*GetModuleForAddress(reinterpret_cast<uint64>(&Initialize)));
 	}
 
@@ -128,7 +124,7 @@ namespace Atlas::Process
 			return;
 		}
 
-		const HMODULE ntdll     = GetModuleHandleW(L"ntdll.dll");
+		const HMODULE ntdll     = GetModuleHandle(L"ntdll.dll");
 		const auto register_dll = reinterpret_cast<LdrRegisterDllNotification_t>(GetProcAddress(ntdll, "LdrRegisterDllNotification"));
 		if (!register_dll) {
 			printf("Failed to get LdrRegisterDllNotification\n");
@@ -152,7 +148,7 @@ namespace Atlas::Process
 			return;
 		}
 
-		const HMODULE ntdll       = GetModuleHandleW(L"ntdll.dll");
+		const HMODULE ntdll       = GetModuleHandle(L"ntdll.dll");
 		const auto unregister_dll = reinterpret_cast<LdrUnregisterDllNotification_t>(GetProcAddress(ntdll, "LdrUnregisterDllNotification"));
 		if (!unregister_dll) {
 			printf("Failed to get LdrUnregisterDllNotification\n");

@@ -37,3 +37,12 @@ EXPORT_ALIAS_CONVERT(uint64, UInt64);
 //
 EXPORT_CONCEPT(Cpt_Integral, (t_input), std::is_integral_v<std::remove_cv_t<t_input>>
                || std::is_pointer_v<std::remove_cv_t<t_input>>);
+
+EXPORT_CONCEPT(Cpt_EnumIntegral, (t_input), std::is_enum_v<std::remove_const_t<t_input>>
+               && std::is_integral_v<std::underlying_type_t<t_input>>);
+
+EXPORT_CONCEPT(Cpt_Ptr, (t_input), std::is_pointer_v<std::remove_const_t<t_input>>);
+
+EXPORT_CONCEPT(Cpt_C_W_Str, (t_input), std::is_same_v<t_input, const char*>
+               || std::is_same_v<t_input, const wchar_t*>
+               || std::is_same_v<t_input, nullptr_t>);

@@ -1,25 +1,25 @@
 // Hazno - 2026
 
-module;
-
-#include <Windows.h>
-#include <tlhelp32.h>
-
 export module Atlas.Process:Module;
 import Atlas.Common;
+import std;
 
 export namespace Atlas::Process
 {
 	struct Module
 	{
 		private:
-			uint64 m_base;
-			uint64 m_end;
-			uint64 m_size;
+			uint64 m_base{};
+			uint64 m_end{};
+			uint64 m_size{};
 			std::string m_name;
 
 		public:
-			explicit Module(MODULEENTRY32 modEntry);
+			explicit Module(const uint64 base, const uint64 end, const uint64 size, const std::string& name) :
+				m_base(base),
+				m_end(end),
+				m_size(size),
+				m_name(std::move(name)) {}
 
 			ATLAS_NODISCARD uint64 RVA(uint64 absolute) const;
 

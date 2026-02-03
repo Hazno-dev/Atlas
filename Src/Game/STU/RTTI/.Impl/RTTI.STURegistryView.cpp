@@ -1,7 +1,6 @@
 // Hazno - 2026
 
 module Atlas.Game.STU.RTTI;
-import :STURegistryView;
 import Atlas.Common;
 import std;
 
@@ -35,6 +34,6 @@ namespace Atlas::STU
 			throw std::out_of_range("Dereferencing invalid STURegistry iterator!");
 		}
 
-		return {m_current->Info, m_current};
+		return std::pair{m_current->Info, m_current};
 	}
 }

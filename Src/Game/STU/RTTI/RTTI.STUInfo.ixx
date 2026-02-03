@@ -6,6 +6,8 @@ module;
 export module Atlas.Game.STU.RTTI:STUInfo;
 import Atlas.Common;
 import :STUArgumentInfo;
+import :STUArgumentInfoView;
+import :STUInfoView;
 
 export namespace Atlas::STU
 {
@@ -97,37 +99,37 @@ export namespace Atlas::STU
 		 * @param includeParents Whether to include parent STUInfo argument infos.
 		 * @return STUArgumentInfoView of argument infos.
 		 */
-		//[[nodiscard]] STUArgumentInfoView RangeArgs(bool includeParents = true) const;
+		[[nodiscard]] STUArgumentInfoView RangeArgs(bool includeParents = true) const;
 
 		/**
 		 * Enumerates all sibling STUInfo types. Starting from this type's next sibling.
 		 * @return STUInfoView of sibling types.
 		 */
-		//[[nodiscard]] STUInfoView RangeSiblings() const;
+		[[nodiscard]] STUInfoView RangeSiblings() const;
 
 		/**
 		 * Enumerates all direct child STUInfo types. Starting from this type's first child.
 		 * @return STUInfoView of child types.
 		 */
-		//[[nodiscard]] STUInfoView RangeChildren() const;
+		[[nodiscard]] STUInfoView RangeChildren() const;
 
 		/**
 		 * Enumerates all descendant STUInfo types (children and their siblings). Starting from this type's first child.
 		 * @return STUInfoView of descendant types.
 		 */
-		//[[nodiscard]] STUInfoView RangeDescendants() const;
+		[[nodiscard]] STUInfoView RangeDescendants() const;
 
 		/**
 		 * Enumerates all direct parent STUInfo types. Starting from this type's parent.
 		 * @return STUInfoView of parent types.
 		 */
-		//[[nodiscard]] STUInfoView RangeParents() const;
+		[[nodiscard]] STUInfoView RangeParents() const;
 
 		/**
 		 * Enumerates all ancestor STUInfo types (parents and their siblings). Starting from this type's parent.
 		 * @return STUInfoView of ancestor types.
 		 */
-		//[[nodiscard]] STUInfoView RangeAncestors() const;
+		[[nodiscard]] STUInfoView RangeAncestors() const;
 
 		[[nodiscard]] bool AssignableToHash(uint64 assign) const;
 		[[nodiscard]] bool AssignableToHashes(std::initializer_list<uint64> assign) const;

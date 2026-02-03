@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 4.1.0)
+
 file(GLOB_RECURSE ATLAS_SOURCES_STRIPPED CONFIGURE_DEPENDS
         "${CMAKE_CURRENT_SOURCE_DIR}/Src/Game/*.ixx")
 

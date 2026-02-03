@@ -4,83 +4,84 @@ export module Atlas.Game.STU.RTTI:STUInfoView;
 import Atlas.Common;
 import std;
 
-struct STUInfo;
-struct STUArgumentInfo;
-
 export namespace Atlas::STU
 {
-    enum STUArgumentViewFlags
-    {
-        INVALID                 = 0 << 0,
-        SiblingsTraverse        = 1 << 0,
-        SiblingsNoTraverse      = 1 << 1,
-        ParentsTraverse         = 1 << 2,
-        ChildrenTraverse        = 1 << 3,
-    };
+	struct STUInfo;
+	struct STUArgumentInfo;
 
-    constexpr STUArgumentViewFlags operator|(const STUArgumentViewFlags a, STUArgumentViewFlags b) {
-        return static_cast<STUArgumentViewFlags>(
-            static_cast<uint32>(a) | static_cast<uint32>(b)
-        );
-    }
+	enum STUArgumentViewFlags
+	{
+		INVALID            = 0 << 0,
+		SiblingsTraverse   = 1 << 0,
+		SiblingsNoTraverse = 1 << 1,
+		ParentsTraverse    = 1 << 2,
+		ChildrenTraverse   = 1 << 3,
+	};
 
-    struct STUInfoView
-    {
-        private:
-            const STUArgumentViewFlags  m_flags;
-            const STUInfo*              m_info;
+	constexpr STUArgumentViewFlags operator|(const STUArgumentViewFlags a, STUArgumentViewFlags b)
+	{
+		return static_cast<STUArgumentViewFlags>(
+			static_cast<uint32>(a) | static_cast<uint32>(b)
+		);
+	}
 
-           explicit STUInfoView(const STUInfo* info, const STUArgumentViewFlags flags) :
-               m_flags(flags),
-               m_info(info) {}
+	struct STUInfoView
+	{
+		private:
+			const STUArgumentViewFlags m_flags;
+			const STUInfo* m_info;
 
-        public:
-            STUInfoView() = delete;
+			explicit STUInfoView(const STUInfo* info, const STUArgumentViewFlags flags) :
+				m_flags(flags),
+				m_info(info) {}
 
-            template <STUArgumentViewFlags T>
-            static constexpr STUInfoView Create(const STUInfo* info)
-            {
-                static_assert(!Utility::Enums::HasAllFlags(T, ParentsTraverse | ChildrenTraverse),
-                    "Cannot traverse both parents and children simultaneously.");
+		public:
+			STUInfoView() = delete;
 
-                return STUInfoView(info, T);
-            }
+			template <STUArgumentViewFlags T>
+			static constexpr STUInfoView Create(const STUInfo* info)
+			{
+				static_assert(!HasAllFlags(T, ParentsTraverse | ChildrenTraverse),
+				              "Cannot traverse both parents and children simultaneously.");
 
-            struct Iter
-            {
-                const STUArgumentViewFlags m_flags;
+				return STUInfoView(info, T);
+			}
 
-                const STUInfo*            m_root;
-                const STUInfo*            m_current;
+			struct Iter
+			{
+				const STUArgumentViewFlags m_flags;
 
-                using iterator_category = std::forward_iterator_tag;
-                using value_type        = const STUInfo*;
-                using difference_type   = std::ptrdiff_t;
+				const STUInfo* m_root;
+				const STUInfo* m_current;
 
-                Iter() :
-                    m_flags(INVALID),
-                    m_root(nullptr),
-                    m_current(nullptr) {}
+				using iterator_category = std::forward_iterator_tag;
+				using value_type        = const STUInfo*;
+				using difference_type   = std::ptrdiff_t;
 
-                Iter(const STUInfo* info, const STUArgumentViewFlags m_flags) :
-                    m_flags(m_flags),
-                    m_root(info),
-                    m_current(info) {}
+				Iter() :
+					m_flags(INVALID),
+					m_root(nullptr),
+					m_current(nullptr) {}
 
-                Iter& operator++();
-                Iter operator++(int);
-                bool operator==(const Iter& it) const;
-                value_type operator*() const;
-            };
+				Iter(const STUInfo* info, const STUArgumentViewFlags m_flags) :
+					m_flags(m_flags),
+					m_root(info),
+					m_current(info) {}
 
-            [[nodiscard]] Iter begin() const
-            {
-                return Iter{m_info, m_flags};
-            }
+				Iter& operator++();
+				Iter operator++(int);
+				bool operator==(const Iter& it) const;
+				value_type operator*() const;
+			};
 
-            [[nodiscard]] Iter end() const
-            {
-                return Iter{nullptr, m_flags};
-            }
-    };
+			[[nodiscard]] Iter begin() const
+			{
+				return Iter{m_info, m_flags};
+			}
+
+			[[nodiscard]] Iter end() const
+			{
+				return Iter{nullptr, m_flags};
+			}
+	};
 }

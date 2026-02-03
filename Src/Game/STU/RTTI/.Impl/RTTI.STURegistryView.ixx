@@ -1,18 +1,19 @@
 // Hazno - 2026
 
 export module Atlas.Game.STU.RTTI:STURegistryView;
+import :STUInfo;
 import Atlas.Common;
-
-struct STURegistry;
-struct STUInfo;
-struct STUArgumentInfo;
+import std;
 
 export namespace Atlas::STU
 {
+	struct STURegistry;
+	struct STUArgumentInfo;
+
 	struct STURegistryView
 	{
 		private:
-			const STURegistry*  m_registry;
+			const STURegistry* m_registry;
 
 			explicit STURegistryView(const STURegistry* m_registry) :
 				m_registry(m_registry) {}
@@ -27,7 +28,7 @@ export namespace Atlas::STU
 
 			struct Iter
 			{
-				const STURegistry*        m_current;
+				const STURegistry* m_current;
 
 				using iterator_category = std::forward_iterator_tag;
 				using value_type        = std::pair<const STUInfo*, const STURegistry*>;
@@ -56,11 +57,13 @@ export namespace Atlas::STU
 			}
 	};
 
-	inline auto begin(const STURegistry* r) {
+	inline auto begin(const STURegistry* r)
+	{
 		return STURegistryView::Create(r).begin();
 	}
 
-	inline auto end(const STURegistry* r) {
+	inline auto end(const STURegistry* r)
+	{
 		return STURegistryView::Create(r).end();
 	}
 }

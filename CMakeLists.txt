@@ -5,15 +5,15 @@ project(Atlas VERSION 0.1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+include(CMake/Utility.cmake)
 include(CMake/Precompile.cmake)
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
-include(CMake.Atlas.cmake)
-include(CMake.AtlasStripped.cmake)
+include(CMake.Targets.cmake)
 
-if(PROJECT_IS_TOP_LEVEL)
-    install(TARGETS Atlas AtlasStripped
+if (PROJECT_IS_TOP_LEVEL)
+    install(TARGETS Atlas
             EXPORT AtlasTargets
             ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
             FILE_SET CXX_MODULES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/Atlas"
@@ -37,4 +37,4 @@ if(PROJECT_IS_TOP_LEVEL)
             "${CMAKE_CURRENT_BINARY_DIR}/AtlasConfig.cmake"
             "${CMAKE_CURRENT_BINARY_DIR}/AtlasConfigVersion.cmake"
             DESTINATION "${CMAKE_INSTALL_LIBDIR}/CMake/Atlas")
-endif()
+endif ()

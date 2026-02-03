@@ -1,19 +1,18 @@
 // Hazno - 2026
 
 export module Atlas.Game.STU.RTTI:STUArgumentInfoView;
+import :STUInfoView;
+import :STUArgumentInfo;
 import Atlas.Common;
 import std;
-
-struct STUInfo;
-struct STUArgumentInfo;
 
 namespace Atlas::STU
 {
 	struct STUArgumentInfoView
 	{
 		private:
-			const STUInfo*  m_info;
-			bool            m_includeParents;
+			const STUInfo* m_info;
+			bool m_includeParents;
 
 			explicit STUArgumentInfoView(const STUInfo* info, const bool includeParents = true) :
 				m_info(info),
@@ -29,9 +28,9 @@ namespace Atlas::STU
 
 			struct Iter
 			{
-				const STUInfo*  m_info;
-				int32           m_currentPos;
-				bool            m_includeParents;
+				const STUInfo* m_info;
+				int32 m_currentPos;
+				bool m_includeParents;
 
 				using iterator_category = std::forward_iterator_tag;
 				using value_type        = std::pair<const STUInfo*, STUArgumentInfo*>;
@@ -42,7 +41,8 @@ namespace Atlas::STU
 				Iter(const STUInfo* info, const bool includeParents) :
 					m_info(info),
 					m_currentPos(-1),
-					m_includeParents(includeParents) {
+					m_includeParents(includeParents)
+				{
 					this->operator++();
 				}
 
