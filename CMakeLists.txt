@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(CMake/Utility.cmake)
 include(CMake/Precompile.cmake)
+include(CMake/Resource.cmake)
+
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 

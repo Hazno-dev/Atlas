@@ -51,3 +51,4 @@ find_package(inja CONFIG REQUIRED)
 target_link_libraries(AtlasCodegen PRIVATE pantor::inja)
 
 atlas_apply_target_base(AtlasCodegen)
+atlas_add_resources(AtlasCodegen)

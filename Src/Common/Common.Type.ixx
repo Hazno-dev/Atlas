@@ -1,5 +1,6 @@
 // Hazno - 2026
 
+// ReSharper disable CppInconsistentNaming
 module;
 
 #include "Common/Private/Common.Macros.h"
@@ -35,6 +36,7 @@ EXPORT_ALIAS_CONVERT(uint64, UInt64);
 //
 // Concepts
 //
+
 EXPORT_CONCEPT(Cpt_Integral, (t_input), std::is_integral_v<std::remove_cv_t<t_input>>
                || std::is_pointer_v<std::remove_cv_t<t_input>>);
 

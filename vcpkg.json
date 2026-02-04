@@ -1,8 +1,9 @@
 {
   "dependencies": [
     "fmt",
+    "inja",
     "nlohmann-json",
     "spdlog",
-    "inja"
+    "cmakerc"
   ]
 }
