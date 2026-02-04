@@ -3,6 +3,7 @@
 export module Atlas.Game.STU.RTTI:STURegistry;
 import :STUInfo;
 import :STURegistryView;
+import Atlas.Process;
 
 export namespace Atlas::STU
 {
@@ -26,16 +27,16 @@ export namespace Atlas::STU
 		/// EXTENSIONS
 		/////////////////////////////
 
+		ATLAS_NODISCARD STUInfo* GetSTUInfoByHash(uint32 hash) const;
+
+		ATLAS_NODISCARD STURegistryView Range() const;
+
 		/**
 		 * Get the singleton instance of the STURegistry list head.
 		 * @return Pointer to the first STURegistry in the linked list.
 		 */
-		//[[nodiscard]] inline STURegistry* Get();
-		//[[nodiscard]] static STURegistry* Get(const Utility::Modules::ModuleBounds& module);
-
-		//[[nodiscard]] STUInfo* GetSTUInfoByHash(uint32 hash) const;
-
-		[[nodiscard]] STURegistryView Range() const;
+		ATLAS_NODISCARD static STURegistry* Get();
+		ATLAS_NODISCARD static STURegistry* Get(const Process::Module& module);
 	};
 
 	ATLAS_VALIDATE_SIZE(STURegistry, 0x10);

@@ -15,12 +15,13 @@ export namespace Atlas::STU
 		STU_ConstraintType_Map                      = 0x7,
 		STU_ConstraintType_Enum                     = 0x8, // Has a size of 4
 		STU_ConstraintType_BsList_Enum              = 0x9,
-		STU_ConstraintType_NonStuResourceRef        = 0xA,
-		STU_ConstraintType_BsList_NonStuResourceRef = 0xB,
+		STU_ConstraintType_NonSTUResourceRef        = 0xA,
+		STU_ConstraintType_BsList_NonSTUResourceRef = 0xB,
 		STU_ConstraintType_ResourceRef              = 0xC,
 		STU_ConstraintType_BsList_ResourceRef       = 0xD, // Inlined list of resourceref
 	};
 
+	const char* STUConstraintTypeToString(STUConstraintType type);
 	/**
 	 *  <b> STUConstraint </b> \n
 	 *      Description TBC
@@ -42,7 +43,7 @@ export namespace Atlas::STU
 			ATLAS_STUB(int64*);
 			ATLAS_STUB(int64*);
 
-			virtual int64 GetStuHashWithTypeFlag() = 0;
+			virtual int64 GetSTUHashWithTypeFlag() = 0;
 			virtual uint64 GetTypeFlag() = 0;
 
 			virtual uint64 GetNameHash() = 0;
@@ -77,7 +78,7 @@ export namespace Atlas::STU
 			/// EXTENSIONS
 			/////////////////////////////
 
-			int64 ExGetStuType();
+			int64 ExGetSTUType();
 			STUConstraintType ExToConstraintType();
 			bool ExIsPrimitive();
 			bool ExIsList();

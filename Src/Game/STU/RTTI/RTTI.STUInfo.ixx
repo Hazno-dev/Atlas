@@ -48,7 +48,7 @@ export namespace Atlas::STU
 		 */
 		char* Name;
 
-		InheritanceInfo* Rtti_Info;
+		InheritanceInfo* RTTI_Info;
 
 		/**
 		 * Start of sibling chain which all inherit from this base.
@@ -99,53 +99,53 @@ export namespace Atlas::STU
 		 * @param includeParents Whether to include parent STUInfo argument infos.
 		 * @return STUArgumentInfoView of argument infos.
 		 */
-		[[nodiscard]] STUArgumentInfoView RangeArgs(bool includeParents = true) const;
+		ATLAS_NODISCARD STUArgumentInfoView RangeArgs(bool includeParents = true) const;
 
 		/**
 		 * Enumerates all sibling STUInfo types. Starting from this type's next sibling.
 		 * @return STUInfoView of sibling types.
 		 */
-		[[nodiscard]] STUInfoView RangeSiblings() const;
+		ATLAS_NODISCARD STUInfoView RangeSiblings() const;
 
 		/**
 		 * Enumerates all direct child STUInfo types. Starting from this type's first child.
 		 * @return STUInfoView of child types.
 		 */
-		[[nodiscard]] STUInfoView RangeChildren() const;
+		ATLAS_NODISCARD STUInfoView RangeChildren() const;
 
 		/**
 		 * Enumerates all descendant STUInfo types (children and their siblings). Starting from this type's first child.
 		 * @return STUInfoView of descendant types.
 		 */
-		[[nodiscard]] STUInfoView RangeDescendants() const;
+		ATLAS_NODISCARD STUInfoView RangeDescendants() const;
 
 		/**
 		 * Enumerates all direct parent STUInfo types. Starting from this type's parent.
 		 * @return STUInfoView of parent types.
 		 */
-		[[nodiscard]] STUInfoView RangeParents() const;
+		ATLAS_NODISCARD STUInfoView RangeParents() const;
 
 		/**
 		 * Enumerates all ancestor STUInfo types (parents and their siblings). Starting from this type's parent.
 		 * @return STUInfoView of ancestor types.
 		 */
-		[[nodiscard]] STUInfoView RangeAncestors() const;
+		ATLAS_NODISCARD STUInfoView RangeAncestors() const;
 
-		[[nodiscard]] bool AssignableToHash(uint64 assign) const;
-		[[nodiscard]] bool AssignableToHashes(std::initializer_list<uint64> assign) const;
-		[[nodiscard]] bool AssignableToRtti(uint64 assign) const;
+		ATLAS_NODISCARD bool ExAssignableToHash(uint64 assign) const;
+		ATLAS_NODISCARD bool ExAssignableToHashes(std::initializer_list<uint64> assign) const;
+		ATLAS_NODISCARD bool ExAssignableToRTTI(uint64 assign) const;
 
-		template <class T> requires (std::is_integral_v<std::remove_reference_t<T>> || std::is_pointer_v<std::remove_reference_t<T>>)
-		[[nodiscard]] bool AssignableToRtti(T assign) const
+		template <Cpt_Integral t_input>
+		ATLAS_NODISCARD bool ExAssignableToRTTI(t_input assign) const
 		{
-			if constexpr (std::is_pointer_v<std::remove_reference_t<T>>) {
-				return AssignableToRtti(reinterpret_cast<uint64>(assign));
+			if constexpr (std::is_pointer_v<std::remove_reference_t<t_input>>) {
+				return ExAssignableToRTTI(reinterpret_cast<uint64>(assign));
 			} else {
-				return AssignableToRtti(static_cast<uint64>(assign));
+				return ExAssignableToRTTI(static_cast<uint64>(assign));
 			}
 		}
 
-		[[nodiscard]] STUArgumentInfo* ArgByHash(uint32 hash, bool search_parents = true) const;
+		ATLAS_NODISCARD STUArgumentInfo* ExArgByHash(uint32 hash, bool search_parents = true) const;
 	};
 
 	ATLAS_VALIDATE_SIZE(STUInfo, 0x60);
