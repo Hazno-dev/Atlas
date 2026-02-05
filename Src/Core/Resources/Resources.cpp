@@ -20,6 +20,27 @@ namespace Atlas::Resources
 		return s_filesystem.exists(path) && s_filesystem.is_file(path);
 	}
 
+	void ListResources(std::vector<std::string>& targetList, const std::string& directory, const std::string& extension_filter)
+	{
+		if (!s_filesystem.exists(directory)) {
+			throw std::runtime_error("Resource directory does not exist: " + directory);
+		}
+
+		if (!s_filesystem.is_directory(directory)) {
+			throw std::runtime_error("Resource directory not found: " + directory);
+		}
+
+		for (const auto& entry : s_filesystem.iterate_directory(directory)) {
+			if (const auto target = directory + '/' + entry.filename(); s_filesystem.is_file(target)) {
+				if (extension_filter.empty() || entry.filename().ends_with(extension_filter)) {
+					targetList.push_back(target);
+				}
+			} else {
+				ListResources(targetList, target, extension_filter);
+			}
+		}
+	}
+
 	std::string LoadResource(const std::string& path)
 	{
 		if (!s_filesystem.exists(path)) {

@@ -1,0 +1,9 @@
+## if exists("Template")
+{{ Template }}
+## endif
+struct {{ Name }} {% if exists("Inheritance") %}: {{ Inheritance }}{% endif %}
+{
+## for member in Members
+{{ member }}
+## endfor
+};

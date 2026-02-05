@@ -50,5 +50,8 @@ target_link_libraries(AtlasCodegen PRIVATE nlohmann_json::nlohmann_json)
 find_package(inja CONFIG REQUIRED)
 target_link_libraries(AtlasCodegen PRIVATE pantor::inja)
 
+find_package(Boost REQUIRED QUIET COMPONENTS core mp11 describe)
+target_link_libraries(AtlasCodegen PRIVATE ${Boost_LIBRARIES})
+
 atlas_apply_target_base(AtlasCodegen)
 atlas_add_resources(AtlasCodegen)

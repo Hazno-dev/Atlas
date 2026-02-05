@@ -1,0 +1,13 @@
+{% include "File/Preamble.inja" %}
+
+export module Atlas.{{ Name }};
+## for import in Imports
+import {{ import }};
+## endfor
+
+export namespace Atlas::{{ Namespace }}
+{
+## for Definition in Definitions
+{{ Definition }}
+## endfor
+}

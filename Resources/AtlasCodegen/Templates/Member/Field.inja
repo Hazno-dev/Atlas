@@ -1,0 +1,1 @@
+{{ Type }} {{ Name }}{% if exists("Value") %} = {{ Value }}{% endif %};

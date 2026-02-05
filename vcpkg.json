@@ -1,9 +1,12 @@
 {
   "dependencies": [
+    "boost-describe",
+    "boost-mp11",
+    "cmakerc",
     "fmt",
     "inja",
     "nlohmann-json",
     "spdlog",
-    "cmakerc"
+    "boost-core"
   ]
 }

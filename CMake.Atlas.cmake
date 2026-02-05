@@ -36,4 +36,7 @@ target_link_libraries(Atlas PRIVATE spdlog::spdlog_header_only)
 find_package(nlohmann_json CONFIG REQUIRED)
 target_link_libraries(Atlas PRIVATE nlohmann_json::nlohmann_json)
 
+find_package(Boost REQUIRED QUIET COMPONENTS core mp11 describe)
+target_link_libraries(Atlas PRIVATE ${Boost_LIBRARIES})
+
 atlas_apply_target_base(Atlas)
