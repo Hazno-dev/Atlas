@@ -1,12 +1,9 @@
 // Hazno - 2026
 
-module;
-
-#include <frozen/unordered_map.h>
-#include <frozen/string.h>
-
 export module Atlas.Game.Database:Lookup;
 import Atlas.Common;
+import std;
+import frozen;
 
 export namespace Atlas::Database
 {

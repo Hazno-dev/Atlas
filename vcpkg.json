@@ -4,7 +4,6 @@
     "boost-describe",
     "boost-mp11",
     "cmakerc",
-    "frozen",
     "inja",
     "nlohmann-json",
     "spdlog",

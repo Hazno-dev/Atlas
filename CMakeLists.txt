@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 4.1.0)
 
+set(ATLAS_DEFAULT_DEFINITIONS SPDLOG_FMT_EXTERNAL FROZEN_MODULE FROZEN_STD_MODULE FMT_IMPORT_STD FMT_MODULE FMT_ATTACH_TO_GLOBAL_MODULE)
+
 project(Atlas VERSION 0.1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
@@ -14,9 +16,6 @@ include(CMake/Sources.cmake)
 
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
-
-set(FMT_MODULE ON)
-add_subdirectory(External/fmt)
 
 include(CMake.Targets.cmake)
 #[[
