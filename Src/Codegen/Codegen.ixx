@@ -5,17 +5,22 @@ module;
 #include <inja/inja.hpp>
 
 export module Atlas.Codegen;
-export import :Instance;
 import std;
 
 export namespace Atlas::Codegen
 {
-	int Run(CodegenSettings* settings);
-	inja::Environment* GetEnvironment();
-
-	template <typename t_data>
-	void Generate(CodegenSettings* settings, inja::json& json)
+	struct CodegenInstance
 	{
-		static_assert(sizeof(t_data) == 0, "Generate is not specialized for this type");
+		//Settings
+		std::filesystem::path BindingPath;
+		std::filesystem::path RepoPath;
+
+		bool IncludeSTUNames = false;
+	};
+
+	inline inja::Environment* GetEnvironment()
+	{
+		static inja::Environment env{};
+		return &env;
 	}
 }

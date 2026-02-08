@@ -1,8 +1,8 @@
 // Hazno - 2026
 
 import Atlas.Codegen;
+import Atlas.Codegen.Process;
 import std;
-
 
 void PrintHelp()
 {
@@ -12,38 +12,43 @@ void PrintHelp()
 	std::cout << "	--help -h - Display help message" << std::endl;
 }
 
+inline constexpr auto c_errInvalidArg = "Invalid configuration. Use --help for more info.";
+
 int main(int argc, char* argv[])
 {
-	Atlas::Codegen::CodegenSettings config{};
+	Atlas::Codegen::CodegenInstance config{};
+	auto processes = Atlas::Codegen::GetProcesses();
+	processes.insert(processes.end(), {
+			                 std::make_shared<Atlas::Codegen::HelpProcess>(),
+			                 std::make_shared<Atlas::Codegen::STUMetaProcess>(),
+			                 std::make_shared<Atlas::Codegen::ProbeGenProcess>(),
+	                 });
 
 	if (argc < 2) {
-		PrintHelp();
+		std::cerr << c_errInvalidArg << std::endl;
 		return 1;
 	}
 
 	for (int i = 1; i < argc; ++i) {
-		std::string arg       = argv[i];
-		const auto assign_pos = arg.find('=');
-		if (auto command = arg.substr(0, assign_pos + 1); command == "--binding=" || command == "-b=") {
-			config.BindingPath = arg.substr(assign_pos + 1);
-			if (!std::filesystem::exists(config.BindingPath)) {
-				std::cerr << "Binding file does not exist: " << config.BindingPath << std::endl;
-				return 1;
-			}
-		} else if (command == "--help" || command == "-h") {
-			std::cout << "Usage: Codegen --input=<input_path> --output=<output_path> [--overwrite]" << std::endl;
-			return 0;
-		} else {
-			std::cerr << "Unknown argument: " << command << '(' << arg << ')' << std::endl;
-			std::cerr << "Use --help for more info" << arg << std::endl;
-			return 1;
+		std::string arg = argv[i];
+		for (const auto& process : processes) {
+			process->UpdateArguments(&config, arg);
 		}
 	}
 
-	try {
-		Atlas::Codegen::Run(&config);
-	} catch (const std::exception& e) {
-		std::cerr << "Codegen failed: " << e.what() << std::endl;
-		return 1;
+	for (const auto& process : processes) {
+		if (!process->ShouldRun(&config)) {
+			continue;
+		}
+
+		try {
+			process->Run(&config);
+			if (process->IsBlocking()) {
+				break;
+			}
+		} catch (const std::exception& e) {
+			std::cerr << "Process failed: " << e.what() << std::endl;
+			return 1;
+		}
 	}
 }

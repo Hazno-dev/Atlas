@@ -4,11 +4,11 @@ module;
 
 #include <nlohmann/json.hpp>
 
-export module Atlas.Binding.Serialization:Hex;
+export module Atlas.Game.Database.Probe:Hex;
 import Atlas.Common;
 import std;
 
-namespace Atlas::Binding
+namespace Atlas::Probe
 {
 	struct Data_UHex64
 	{

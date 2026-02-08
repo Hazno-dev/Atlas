@@ -5,11 +5,11 @@ module;
 #include <nlohmann/json.hpp>
 #include <boost/describe.hpp>
 
-export module Atlas.Binding.Serialization:Game;
+export module Atlas.Game.Database.Probe:Game;
 import :STU;
 import std;
 
-export namespace Atlas::Binding
+export namespace Atlas::Probe
 {
 	struct Data_Root
 	{

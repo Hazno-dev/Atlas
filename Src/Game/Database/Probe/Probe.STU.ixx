@@ -4,12 +4,12 @@ module;
 
 #include <nlohmann/json.hpp>
 
-export module Atlas.Binding.Serialization:STU;
+export module Atlas.Game.Database.Probe:STU;
 import :Hex;
 import std;
 import Atlas.Game.STU.RTTI;
 
-export namespace Atlas::Binding
+export namespace Atlas::Probe
 {
 	struct Data_STUArgument
 	{

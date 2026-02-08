@@ -1,5 +1,6 @@
 set(ATLAS_PRECOMPILED_HEADERS
         "${CMAKE_CURRENT_SOURCE_DIR}/Src/Precompiled/Definitions.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/Src/Precompiled/Logs.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/Src/Precompiled/Macros.h")
 
 string(TOUPPER "ATLAS_PLATFORM_${CMAKE_CXX_COMPILER_ID}" ATLAS_PLATFORM_DEF)

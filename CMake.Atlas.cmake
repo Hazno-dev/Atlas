@@ -7,18 +7,7 @@ target_compile_features(Atlas
         PRIVATE cxx_std_23
         INTERFACE cxx_std_20)
 
-target_sources(Atlas
-        PUBLIC
-        FILE_SET CXX_MODULES
-        BASE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/Src/"
-        FILES
-        ${ATLAS_SOURCES_MODULES}
-        FILE_SET HEADERS
-        BASE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/Src/"
-        FILES
-        ${ATLAS_SOURCES_HEADERS}
-        PRIVATE
-        ${ATLAS_SOURCES_IMPLS})
+atlas_apply_base_sources(Atlas)
 
 target_include_directories(Atlas
         PUBLIC
@@ -27,8 +16,7 @@ target_include_directories(Atlas
         PRIVATE
         ${VCPKG_IMPORT_PREFIX}/include)
 
-find_package(fmt QUIET CONFIG REQUIRED)
-target_link_libraries(Atlas PRIVATE fmt::fmt-header-only)
+target_link_libraries(Atlas PRIVATE fmt::fmt)
 
 find_package(spdlog QUIET CONFIG REQUIRED)
 target_link_libraries(Atlas PRIVATE spdlog::spdlog_header_only)
@@ -39,4 +27,8 @@ target_link_libraries(Atlas PRIVATE nlohmann_json::nlohmann_json)
 find_package(Boost REQUIRED QUIET COMPONENTS core mp11 describe)
 target_link_libraries(Atlas PRIVATE ${Boost_LIBRARIES})
 
+find_package(frozen CONFIG REQUIRED)
+target_link_libraries(Atlas PRIVATE frozen::frozen frozen::frozen-headers)
+
 atlas_apply_target_base(Atlas)
+atlas_project_version(Atlas 1 0 0 0)

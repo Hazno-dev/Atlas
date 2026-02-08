@@ -13,9 +13,24 @@ export namespace Atlas::Codegen
 {
 	struct GeneratedFile
 	{
-		NLOHMANN_DEFINE_TYPE_INTRUSIVE_WITH_DEFAULT(GeneratedFile, Path_Relative, Data)
+		virtual ~GeneratedFile() = default;
 
-		std::string Path_Relative;
-		inja::json Data;
+		void GenerateToFile(const std::string& path) const
+		{
+			const auto contents = GenerateContents();
+
+			auto target_path = std::filesystem::path(path);
+			target_path = target_path.replace_extension(".Gen" + target_path.extension().string());
+			std::ofstream output(target_path, std::ios::out | std::ios::trunc);
+			if (!output.is_open()) {
+				throw std::runtime_error("Failed to open output file: " + target_path.string());
+			}
+
+			output << contents;
+			output.flush();
+		}
+
+		protected:
+			virtual const std::string GenerateContents() const = 0;
 	};
 }

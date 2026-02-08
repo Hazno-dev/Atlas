@@ -1,16 +1,16 @@
 // Hazno - 2026
 
-module Atlas.Binding.Serialization;
+module Atlas.Game.Database.Probe;
 import Atlas.Game.STU.RTTI;
 import Atlas.Process;
 
-namespace Atlas::Binding
+namespace Atlas::Probe
 {
 	Data_STUArgument::Data_STUArgument(const STU::STUArgumentInfo* arg)
 	{
 		Name = "<unknown>";
 
-		Hash   = arg->Hash;
+		Hash = arg->Hash;
 		Offset = arg->Offset;
 
 		if (arg->Constraint) {
@@ -30,10 +30,10 @@ namespace Atlas::Binding
 	{
 		Name = "<unknown>";
 
-		Hash       = info->Hash;
+		Hash = info->Hash;
 		ParentHash = info->Parent ? info->Parent->Hash : 0;
 
-		RVA         = Process::GetProcessModule().RVA(info);
+		RVA = Process::GetProcessModule().RVA(info);
 		RegistryRVA = 0;
 
 		Size = info->InstanceSize;
@@ -41,7 +41,7 @@ namespace Atlas::Binding
 		IsArray = info->IsArrayInt == 0;
 
 		ArgumentCount = info->ArgsCount;
-		Arguments     = std::vector<Data_STUArgument>(info->ArgsCount);
+		Arguments = std::vector<Data_STUArgument>(info->ArgsCount);
 
 		for (const auto arg : info->RangeArgs(false) | std::views::values) {
 			Arguments.push_back(Data_STUArgument(arg));

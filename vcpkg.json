@@ -1,12 +1,13 @@
 {
   "dependencies": [
+    "boost-core",
     "boost-describe",
     "boost-mp11",
     "cmakerc",
-    "fmt",
+    "frozen",
     "inja",
     "nlohmann-json",
     "spdlog",
-    "boost-core"
+    "fast-cpp-csv-parser"
   ]
 }

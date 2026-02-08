@@ -2,6 +2,7 @@
 
 export module Atlas.Process:Module;
 import Atlas.Common;
+import Atlas;
 import std;
 
 export namespace Atlas::Process
@@ -64,6 +65,13 @@ export namespace Atlas::Process
 			{
 				return m_name;
 			}
+
+		private:
+			static void InitializeModules();
+			static void UninitializeModules();
+
+			friend void Atlas::Initialize();
+			friend void Atlas::Uninitialize();
 	};
 
 	const Module& GetProcessModule();
@@ -75,10 +83,4 @@ export namespace Atlas::Process
 	{
 		return GetModuleForAddress(ToUInt64(addr));
 	}
-}
-
-namespace Atlas::Process
-{
-	void InitializeModules();
-	void UninitializeModules();
 }

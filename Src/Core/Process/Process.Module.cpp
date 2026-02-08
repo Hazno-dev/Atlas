@@ -3,11 +3,11 @@
 module;
 
 module Atlas.Process;
-import Atlas.Common.Platform;
+import Atlas.Platform;
 import Atlas.Common;
 import std.compat;
 
-using LdrRegisterDllNotification_t   = NTSTATUS(ATLAS_STDCALL*)(uint32 Flags, PVOID NotificationFunction, PVOID Context, PVOID* Cookie);
+using LdrRegisterDllNotification_t = NTSTATUS(ATLAS_STDCALL*)(uint32 Flags, PVOID NotificationFunction, PVOID Context, PVOID* Cookie);
 using LdrUnregisterDllNotification_t = NTSTATUS(ATLAS_STDCALL*)(PVOID Cookie);
 
 namespace Atlas::Process
@@ -52,8 +52,8 @@ namespace Atlas::Process
 
 		s_modules.clear();
 
-		const uint32 pid = GetCurrentProcessId();
-		const auto snap  = CreateToolhelp32Snapshot(TH32_SNAP_MODULE | TH32_SNAP_MODULE32, pid);
+		const uint32 pid = Platform::GetCurrentProcessId();
+		const auto snap = Platform::CreateToolhelp32Snapshot(TH32_SNAP_MODULE | TH32_SNAP_MODULE32, pid);
 		if (snap == SYS_INVALID_HANDLE_VALUE) {
 			printf("Invalid handle returned from snapshot in TryUpdateModules\n");
 			return;
@@ -62,8 +62,8 @@ namespace Atlas::Process
 		MODULEENTRY32 me{};
 		me.dwSize = sizeof(me);
 
-		if (!Module32First(snap, &me)) {
-			CloseHandle(snap);
+		if (!Platform::Module32First(snap, &me)) {
+			Platform::CloseHandle(snap);
 			printf("Failed to get first module in TryUpdateModules\n");
 			return;
 		}
@@ -75,15 +75,61 @@ namespace Atlas::Process
 		do {
 			s_modules.emplace_back(mod);
 		}
-		while (Module32Next(snap, &me));
+		while (Platform::Module32Next(snap, &me));
 
-		CloseHandle(snap);
+		Platform::CloseHandle(snap);
 		std::ranges::sort(s_modules, [] (const Module& a, const Module& b) {
 			return a.Base() < b.Base();
 		});
 
-		s_programBounds.emplace(*GetModuleForAddress(GetModuleHandle(nullptr)));
-		s_runtimeBounds.emplace(*GetModuleForAddress(reinterpret_cast<uint64>(&Initialize)));
+		s_programBounds.emplace(*GetModuleForAddress(Platform::GetModuleHandle(nullptr)));
+		s_runtimeBounds.emplace(*GetModuleForAddress(reinterpret_cast<uint64>(&TryUpdateModules)));
+	}
+
+	void Module::InitializeModules()
+	{
+		if (s_cookie) {
+			printf("Init failed. Modules Utility is already initialized!!\n");
+			return;
+		}
+
+		const HMODULE ntdll = Platform::GetModuleHandle(L"ntdll.dll");
+		const auto register_dll = reinterpret_cast<LdrRegisterDllNotification_t>(Platform::GetProcAddress(ntdll, "LdrRegisterDllNotification"));
+		if (!register_dll) {
+			printf("Failed to get LdrRegisterDllNotification\n");
+			return;
+		}
+
+		if (register_dll(0, reinterpret_cast<PVOID>(&DllNotify), nullptr, &s_cookie) < 0) {
+			printf("Failed to register DllNotify\n");
+			return;
+		}
+
+		s_dirty.store(true, std::memory_order_relaxed);
+		printf("Successfully registered DllNotify\n");
+
+		TryUpdateModules();
+	}
+
+	void Module::UninitializeModules()
+	{
+		if (!s_cookie) {
+			return;
+		}
+
+		const HMODULE ntdll = Platform::GetModuleHandle(L"ntdll.dll");
+		const auto unregister_dll = reinterpret_cast<LdrUnregisterDllNotification_t>(Platform::GetProcAddress(ntdll, "LdrUnregisterDllNotification"));
+		if (!unregister_dll) {
+			printf("Failed to get LdrUnregisterDllNotification\n");
+			return;
+		}
+
+		if (unregister_dll(s_cookie)) {
+			printf("Failed to unregister DllNotify\n");
+			return;
+		}
+
+		s_cookie = nullptr;
 	}
 
 	const Module& GetProcessModule()
@@ -115,51 +161,5 @@ namespace Atlas::Process
 		}
 
 		return nullptr;
-	}
-
-	void InitializeModules()
-	{
-		if (s_cookie) {
-			printf("Init failed. Modules Utility is already initialized!!\n");
-			return;
-		}
-
-		const HMODULE ntdll     = GetModuleHandle(L"ntdll.dll");
-		const auto register_dll = reinterpret_cast<LdrRegisterDllNotification_t>(GetProcAddress(ntdll, "LdrRegisterDllNotification"));
-		if (!register_dll) {
-			printf("Failed to get LdrRegisterDllNotification\n");
-			return;
-		}
-
-		if (register_dll(0, reinterpret_cast<PVOID>(&DllNotify), nullptr, &s_cookie) < 0) {
-			printf("Failed to register DllNotify\n");
-			return;
-		}
-
-		s_dirty.store(true, std::memory_order_relaxed);
-		printf("Successfully registered DllNotify\n");
-
-		TryUpdateModules();
-	}
-
-	void UninitializeModules()
-	{
-		if (!s_cookie) {
-			return;
-		}
-
-		const HMODULE ntdll       = GetModuleHandle(L"ntdll.dll");
-		const auto unregister_dll = reinterpret_cast<LdrUnregisterDllNotification_t>(GetProcAddress(ntdll, "LdrUnregisterDllNotification"));
-		if (!unregister_dll) {
-			printf("Failed to get LdrUnregisterDllNotification\n");
-			return;
-		}
-
-		if (unregister_dll(s_cookie)) {
-			printf("Failed to unregister DllNotify\n");
-			return;
-		}
-
-		s_cookie = nullptr;
 	}
 }

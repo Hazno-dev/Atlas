@@ -11,25 +11,16 @@ module;
 #include <TlHelp32.h>
 
 #include "Common/Private/Common.Macros.h"
+#include "Private/Platform.Windows.h"
 
 #undef LoadLibrary
 #undef GetModuleHandle
 #undef GetModuleHandleEx
 #undef GetModuleFileName
 
-export module Atlas.Common.Platform;
+export module Atlas.Platform:Types;
 import Atlas.Common;
 import std;
-
-#define EXPORT_WIN_TYPE(name) \
-	export using ::name
-
-#define EXPORT_WIN_MACRO_U32(name) \
-	export inline constexpr uint32 SYS_##name = name
-
-#define EXPORT_WIN_MACRO_PTR(name) \
-	inline auto s_##name = name; \
-	export inline constexpr auto SYS_##name = &s_##name
 
 //
 // Windows types
@@ -46,50 +37,73 @@ EXPORT_ALIAS(WCHAR, wchar_t);
 // Windows Forwarded types
 //
 
-EXPORT_WIN_TYPE(HANDLE);
-EXPORT_WIN_TYPE(HMODULE);
-EXPORT_WIN_TYPE(HWND);
-EXPORT_WIN_TYPE(HINSTANCE);
-EXPORT_WIN_TYPE(HRESULT);
-EXPORT_WIN_TYPE(PVOID);
-EXPORT_WIN_TYPE(LPVOID);
-EXPORT_WIN_TYPE(LPCVOID);
-EXPORT_WIN_TYPE(LPCSTR);
-EXPORT_WIN_TYPE(LPCWSTR);
-EXPORT_WIN_TYPE(SIZE_T);
-EXPORT_WIN_TYPE(ULARGE_INTEGER);
-EXPORT_WIN_TYPE(LARGE_INTEGER);
-EXPORT_WIN_TYPE(SYSTEM_INFO);
-EXPORT_WIN_TYPE(MODULEENTRY32);
-EXPORT_WIN_TYPE(PROCESSENTRY32);
-EXPORT_WIN_TYPE(MEMORY_BASIC_INFORMATION);
-EXPORT_WIN_TYPE(PROCESS_INFORMATION);
-EXPORT_WIN_TYPE(STARTUPINFOA);
-EXPORT_WIN_TYPE(FILETIME);
-EXPORT_WIN_TYPE(ULARGE_INTEGER);
-EXPORT_WIN_TYPE(LARGE_INTEGER);
-EXPORT_WIN_TYPE(NTSTATUS);
+EXPORT_WIN_USING(HANDLE);
+EXPORT_WIN_USING(HMODULE);
+EXPORT_WIN_USING(HWND);
+EXPORT_WIN_USING(HINSTANCE);
+EXPORT_WIN_USING(HRESULT);
+EXPORT_WIN_USING(PVOID);
+EXPORT_WIN_USING(LPVOID);
+EXPORT_WIN_USING(LPCVOID);
+EXPORT_WIN_USING(LPCSTR);
+EXPORT_WIN_USING(LPCWSTR);
+EXPORT_WIN_USING(SIZE_T);
+EXPORT_WIN_USING(ULARGE_INTEGER);
+EXPORT_WIN_USING(LARGE_INTEGER);
+EXPORT_WIN_USING(SYSTEM_INFO);
+EXPORT_WIN_USING(MODULEENTRY32);
+EXPORT_WIN_USING(PROCESSENTRY32);
+EXPORT_WIN_USING(MEMORY_BASIC_INFORMATION);
+EXPORT_WIN_USING(PROCESS_INFORMATION);
+EXPORT_WIN_USING(STARTUPINFOA);
+EXPORT_WIN_USING(FILETIME);
+EXPORT_WIN_USING(ULARGE_INTEGER);
+EXPORT_WIN_USING(LARGE_INTEGER);
+EXPORT_WIN_USING(NTSTATUS);
 
-EXPORT_WIN_TYPE(PROC);
-EXPORT_WIN_TYPE(NEARPROC);
-EXPORT_WIN_TYPE(FARPROC);
+EXPORT_WIN_USING(PROC);
+EXPORT_WIN_USING(NEARPROC);
+EXPORT_WIN_USING(FARPROC);
 
-EXPORT_WIN_TYPE(PEXCEPTION_ROUTINE);
-EXPORT_WIN_TYPE(EXCEPTION_ROUTINE);
-EXPORT_WIN_TYPE(PVECTORED_EXCEPTION_HANDLER);
-EXPORT_WIN_TYPE(PEXCEPTION_RECORD);
-EXPORT_WIN_TYPE(EXCEPTION_RECORD);
-EXPORT_WIN_TYPE(_EXCEPTION_RECORD);
-EXPORT_WIN_TYPE(PEXCEPTION_POINTERS);
-EXPORT_WIN_TYPE(EXCEPTION_POINTERS);
-EXPORT_WIN_TYPE(_EXCEPTION_POINTERS);
-EXPORT_WIN_TYPE(PCONTEXT);
-EXPORT_WIN_TYPE(CONTEXT);
-EXPORT_WIN_TYPE(_CONTEXT);
+EXPORT_WIN_USING(PEXCEPTION_ROUTINE);
+EXPORT_WIN_USING(EXCEPTION_ROUTINE);
+EXPORT_WIN_USING(PVECTORED_EXCEPTION_HANDLER);
+EXPORT_WIN_USING(PEXCEPTION_RECORD);
+EXPORT_WIN_USING(EXCEPTION_RECORD);
+EXPORT_WIN_USING(_EXCEPTION_RECORD);
+EXPORT_WIN_USING(PEXCEPTION_POINTERS);
+EXPORT_WIN_USING(EXCEPTION_POINTERS);
+EXPORT_WIN_USING(_EXCEPTION_POINTERS);
+EXPORT_WIN_USING(PCONTEXT);
+EXPORT_WIN_USING(CONTEXT);
+EXPORT_WIN_USING(_CONTEXT);
+
+EXPORT_WIN_USING(LPMODULEENTRY32);
 
 //
 // Windows Macros
 //
+
+EXPORT_WIN_MACRO_U32(LMEM_FIXED);
+EXPORT_WIN_MACRO_U32(LMEM_MOVEABLE);
+EXPORT_WIN_MACRO_U32(LMEM_NOCOMPACT);
+EXPORT_WIN_MACRO_U32(LMEM_NODISCARD);
+EXPORT_WIN_MACRO_U32(LMEM_ZEROINIT);
+EXPORT_WIN_MACRO_U32(LMEM_MODIFY);
+EXPORT_WIN_MACRO_U32(LMEM_DISCARDABLE);
+EXPORT_WIN_MACRO_U32(LMEM_VALID_FLAGS);
+EXPORT_WIN_MACRO_U32(LMEM_INVALID_HANDLE);
+
+EXPORT_WIN_MACRO_U32(TH32CS_SNAPHEAPLIST);
+EXPORT_WIN_MACRO_U32(TH32CS_SNAPPROCESS);
+EXPORT_WIN_MACRO_U32(TH32CS_SNAPTHREAD);
+EXPORT_WIN_MACRO_U32(TH32CS_SNAPMODULE);
+EXPORT_WIN_MACRO_U32(TH32CS_SNAPMODULE32);
+EXPORT_WIN_MACRO_U32(TH32CS_SNAPALL);
+EXPORT_WIN_MACRO_U32(TH32CS_INHERIT);
+
+EXPORT_WIN_MACRO_PTR(INVALID_HANDLE_VALUE);
+
 
 EXPORT_WIN_MACRO_U32(STATUS_WAIT_0);
 EXPORT_WIN_MACRO_U32(STATUS_ABANDONED_WAIT_0);
@@ -156,25 +170,9 @@ EXPORT_WIN_MACRO_U32(STATUS_ALREADY_REGISTERED);
 EXPORT_WIN_MACRO_U32(STATUS_SXS_EARLY_DEACTIVATION);
 EXPORT_WIN_MACRO_U32(STATUS_SXS_INVALID_DEACTIVATION);
 
-EXPORT_WIN_MACRO_U32(LMEM_FIXED);
-EXPORT_WIN_MACRO_U32(LMEM_MOVEABLE);
-EXPORT_WIN_MACRO_U32(LMEM_NOCOMPACT);
-EXPORT_WIN_MACRO_U32(LMEM_NODISCARD);
-EXPORT_WIN_MACRO_U32(LMEM_ZEROINIT);
-EXPORT_WIN_MACRO_U32(LMEM_MODIFY);
-EXPORT_WIN_MACRO_U32(LMEM_DISCARDABLE);
-EXPORT_WIN_MACRO_U32(LMEM_VALID_FLAGS);
-EXPORT_WIN_MACRO_U32(LMEM_INVALID_HANDLE);
-
-EXPORT_WIN_MACRO_U32(TH32CS_SNAPHEAPLIST);
-EXPORT_WIN_MACRO_U32(TH32CS_SNAPPROCESS);
-EXPORT_WIN_MACRO_U32(TH32CS_SNAPTHREAD);
-EXPORT_WIN_MACRO_U32(TH32CS_SNAPMODULE);
-EXPORT_WIN_MACRO_U32(TH32CS_SNAPMODULE32);
-EXPORT_WIN_MACRO_U32(TH32CS_SNAPALL);
-EXPORT_WIN_MACRO_U32(TH32CS_INHERIT);
-
-EXPORT_WIN_MACRO_PTR(INVALID_HANDLE_VALUE);
+EXPORT_WIN_MACRO_S32(EXCEPTION_EXECUTE_HANDLER);
+EXPORT_WIN_MACRO_S32(EXCEPTION_CONTINUE_SEARCH);
+EXPORT_WIN_MACRO_S32(EXCEPTION_CONTINUE_EXECUTION);
 
 //
 // Windows Enums. (These are actually just macros in Windows.h but that has no aura)
@@ -212,6 +210,8 @@ export enum class WIN_EXCEPTION_CODE : uint32
 	UNCAUGHT_CXX_EXCEPTION = 0xE06D7363,
 };
 
+EXPORT_WIN_ENUM_EQUALITY(WIN_EXCEPTION_CODE, uint32);
+
 export enum WIN_MEMORY_FLAGS : uint32
 {
 	L_MEMORY_FIXED          = SYS_LMEM_FIXED,
@@ -225,6 +225,8 @@ export enum WIN_MEMORY_FLAGS : uint32
 	L_MEMORY_INVALID_HANDLE = SYS_LMEM_INVALID_HANDLE,
 };
 
+EXPORT_WIN_ENUM_EQUALITY(WIN_MEMORY_FLAGS, uint32)
+
 export enum WIN_TH32_FLAGS : uint32
 {
 	TH32_SNAP_HEAP_LIST = SYS_TH32CS_SNAPHEAPLIST,
@@ -236,126 +238,4 @@ export enum WIN_TH32_FLAGS : uint32
 	TH32_INHERIT        = SYS_TH32CS_INHERIT,
 };
 
-//
-// Platform Functions
-//
-
-export namespace Atlas
-{
-	ATLAS_NODISCARD inline uint32 GetPageSize()
-	{
-		SYSTEM_INFO sys_info;
-		GetSystemInfo(&sys_info);
-		return sys_info.dwPageSize;
-	}
-
-	ATLAS_NODISCARD inline void* GetCurrentProcessHandle()
-	{
-		return GetCurrentProcess();
-	}
-
-	ATLAS_NODISCARD inline uint32 GetCurrentProcessId()
-	{
-		return ::GetCurrentProcessId();
-	}
-
-	ATLAS_NODISCARD inline void* GetCurrentThreadHandle()
-	{
-		return GetCurrentThread();
-	}
-
-	ATLAS_NODISCARD inline uint32 GetCurrentThreadId()
-	{
-		return ::GetCurrentThreadId();
-	}
-
-	inline bool CloseHandle(void* handle)
-	{
-		return ::CloseHandle(handle) != FALSE;
-	}
-
-	template <Cpt_C_W_Str t_str>
-	ATLAS_NODISCARD HMODULE constexpr GetModuleHandle(t_str lpModuleName)
-	{
-		if constexpr (std::is_same_v<t_str, const char*>) {
-			return GetModuleHandleA(lpModuleName);
-		} else {
-			return GetModuleHandleW(lpModuleName);
-		}
-	}
-
-	template <Cpt_C_W_Str t_str>
-	ATLAS_NODISCARD HMODULE constexpr GetModuleHandleEx(uint32 flags, t_str lpModuleName, HMODULE* phModule)
-	{
-		if constexpr (std::is_same_v<t_str, const char*>) {
-			return GetModuleHandleExA(flags, lpModuleName, phModule);
-		} else {
-			return GetModuleHandleExW(flags, lpModuleName, phModule);
-		}
-	}
-
-	template <Cpt_Ptr t_module, Cpt_C_W_Str t_str>
-	ATLAS_NODISCARD uint32 constexpr GetModuleFileName(t_module hModule, t_str lpModuleName, uint32 nSize)
-	{
-		if constexpr (std::is_same_v<t_str, const char*>) {
-			return GetModuleFileNameA(hModule, lpModuleName, nSize);
-		} else {
-			return GetModuleFileNameW(hModule, lpModuleName, nSize);
-		}
-	}
-
-	template <Cpt_C_W_Str t_str>
-	ATLAS_NODISCARD HMODULE constexpr LoadLibrary(t_str lpLibFileName)
-	{
-		if constexpr (std::is_same_v<t_str, const char*>) {
-			return LoadLibraryA(lpLibFileName);
-		} else {
-			return LoadLibraryW(lpLibFileName);
-		}
-	}
-
-	template <uint32 t_size>
-	ATLAS_NODISCARD constexpr std::span<void* const> Stacktrace(const uint32 skip_frames = 2)
-	{
-		static_assert(t_size <= 128, "Stacktrace size too large");
-
-		thread_local void* stack[t_size];
-		const auto captured = CaptureStackBackTrace(skip_frames, t_size, stack, nullptr);
-		return std::span<void* const>(stack, captured);
-	}
-
-	ATLAS_NODISCARD inline void* CreateToolhelp32Snapshot(const uint32 dwFlags, const uint32 th32_process_id)
-	{
-		return ::CreateToolhelp32Snapshot(dwFlags, th32_process_id);
-	}
-
-	template <Cpt_Ptr t_snap, Cpt_Ptr t_entry>
-	inline bool Module32First(t_snap hSnapshot, t_entry entry)
-	{
-		return ::Module32First(hSnapshot, entry) != FALSE;
-	}
-
-	template <Cpt_Ptr t_snap, Cpt_Ptr t_entry>
-	bool Module32Next(t_snap hSnapshot, t_entry entry)
-	{
-		return ::Module32Next(hSnapshot, entry) != FALSE;
-	}
-
-	template <Cpt_Ptr t_input>
-	bool DisableThreadLibraryCalls(t_input hLibModule)
-	{
-		return ::DisableThreadLibraryCalls(hLibModule);
-	}
-
-	template <Cpt_Ptr t_input>
-	bool FreeLibrary(t_input hLibModule)
-	{
-		return ::FreeLibrary(hLibModule) != FALSE;
-	}
-
-	template <Cpt_Ptr t_input>
-	FARPROC GetProcAddress(t_input hModule, const char* lpProcName)
-	{
-		return ::GetProcAddress(hModule, lpProcName);
-	}
-}
+EXPORT_WIN_ENUM_EQUALITY(WIN_TH32_FLAGS, uint32)

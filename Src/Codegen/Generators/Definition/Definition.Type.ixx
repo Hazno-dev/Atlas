@@ -16,35 +16,48 @@ export namespace Atlas::Codegen
 {
 	struct Definition
 	{
-		std::string Name;
-		std::string Comment;
-	std::string Template;
-		std::string Inheritance;
+		protected:
+			~Definition() = default;
 
-		virtual ~Definition() = default;
+		public:
+			const std::string Name;
+			const std::string Inheritance;
+			const std::string Template;
+			const std::string Comment;
 
-		virtual inja::json Serialize() const
-		{
-			inja::json j;
-			j["Name"] = Name;
-			if (!Comment.empty()) {
-				j["Comment"] = Comment;
+			explicit Definition(
+				const std::string& name, const std::string& inheritance = "", const std::string& templ = "", const std::string& comment = "") :
+				Name(name),
+				Inheritance(inheritance),
+				Template(templ),
+				Comment(comment) {}
+
+			virtual inja::json Serialize() const
+			{
+				inja::json j;
+				j["Name"] = Name;
+				if (!Comment.empty()) {
+					j["Comment"] = Comment;
+				}
+
+				if (!Template.empty()) {
+					j["Template"] = Template;
+				}
+				if (!Inheritance.empty()) {
+					j["Inheritance"] = Inheritance;
+				}
+
+				return j;
 			}
-
-			if (!Template.empty()) {
-				j["Template"] = Template;
-			}
-			if (!Inheritance.empty()) {
-				j["Inheritance"] = Inheritance;
-			}
-
-			return j;
-		}
 	};
 
 	struct StructDefinition : Definition
 	{
-		std::vector<MemberField> Members;
+		std::vector<MemberField> Members{};
+
+		explicit StructDefinition(
+			const std::string& name, const std::string& inheritance = "", const std::string& templ = "", const std::string& comment = "") :
+			Definition(name, inheritance, templ, comment) {}
 
 		inja::json Serialize() const override
 		{
@@ -57,8 +70,8 @@ export namespace Atlas::Codegen
 		friend void to_json(BasicJsonType& nlohmann_json_j, const StructDefinition& nlohmann_json_t)
 		{
 			static const std::string c_structTemplate = Resources::LoadResource("Templates/Definition/Struct.inja");
-			const auto env                            = GetEnvironment();
-			nlohmann_json_j                           = env->render(c_structTemplate, nlohmann_json_t.Serialize());
+			const auto env = GetEnvironment();
+			nlohmann_json_j = env->render(c_structTemplate, nlohmann_json_t.Serialize());
 		}
 	};
 
