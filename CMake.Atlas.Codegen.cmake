@@ -50,8 +50,7 @@ target_link_libraries(AtlasCodegen PRIVATE pantor::inja)
 find_package(Boost REQUIRED QUIET COMPONENTS core mp11 describe)
 target_link_libraries(AtlasCodegen PRIVATE ${Boost_LIBRARIES})
 
-find_package(frozen CONFIG REQUIRED)
-target_link_libraries(AtlasCodegen PRIVATE frozen::frozen frozen::frozen-headers)
+target_link_libraries(AtlasCodegen PRIVATE frozen::frozen)
 
 find_path(FAST_CPP_CSV_PARSER_INCLUDE_DIRS "fast-cpp-csv-parser/csv.h")
 target_include_directories(AtlasCodegen PRIVATE ${FAST_CPP_CSV_PARSER_INCLUDE_DIRS})
@@ -59,3 +58,4 @@ target_include_directories(AtlasCodegen PRIVATE ${FAST_CPP_CSV_PARSER_INCLUDE_DI
 atlas_apply_target_base(AtlasCodegen)
 atlas_add_resources(AtlasCodegen)
 atlas_project_version(AtlasCodegen 1 0 0 0)
+atlas_apply_output(AtlasCodegen)

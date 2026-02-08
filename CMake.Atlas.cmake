@@ -27,8 +27,9 @@ target_link_libraries(Atlas PRIVATE nlohmann_json::nlohmann_json)
 find_package(Boost REQUIRED QUIET COMPONENTS core mp11 describe)
 target_link_libraries(Atlas PRIVATE ${Boost_LIBRARIES})
 
-find_package(frozen CONFIG REQUIRED)
-target_link_libraries(Atlas PRIVATE frozen::frozen frozen::frozen-headers)
+target_link_libraries(Atlas PRIVATE frozen::frozen)
 
 atlas_apply_target_base(Atlas)
+atlas_add_resources(Atlas)
 atlas_project_version(Atlas 1 0 0 0)
+atlas_apply_output(Atlas)
