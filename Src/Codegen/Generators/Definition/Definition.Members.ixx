@@ -73,7 +73,7 @@ export namespace Atlas::Codegen
 			{
 				static const std::string c_fieldTemplate = Resources::LoadResource("Templates/Member/Field.inja");
 				const auto env = GetEnvironment();
-				nlohmann_json_j = env->render(c_fieldTemplate, nlohmann_json_t.Serialize());
+				nlohmann_json_j = env->render(c_fieldTemplate, nlohmann_json_t.Serialize()).c_str();
 			}
 	};
 

@@ -4,20 +4,15 @@ import Atlas.Codegen;
 import Atlas.Codegen.Process;
 import std;
 
-void PrintHelp()
-{
-	std::cout << "--- Atlas Codegen" << std::endl << std::endl;
-	std::cout << "  - Arguments:" << std::endl;
-	std::cout << "	--binding=... -b=... - Set the path to the binding source." << std::endl;
-	std::cout << "	--help -h - Display help message" << std::endl;
-}
-
-inline constexpr auto c_errInvalidArg = "Invalid configuration. Use --help for more info.";
+inline constexpr auto c_errInvalidArg = "Invalid arguments. Use --help for more info.";
 
 int main(int argc, char* argv[])
 {
+	std::cout << "--- Atlas Codegen" << std::endl << std::endl;
+
 	Atlas::Codegen::CodegenInstance config{};
-	auto processes = Atlas::Codegen::GetProcesses();
+
+	auto& processes = Atlas::Codegen::GetProcesses();
 	processes.insert(processes.end(), {
 			                 std::make_shared<Atlas::Codegen::HelpProcess>(),
 			                 std::make_shared<Atlas::Codegen::STUMetaProcess>(),
@@ -32,9 +27,14 @@ int main(int argc, char* argv[])
 	for (int i = 1; i < argc; ++i) {
 		std::string arg = argv[i];
 		for (const auto& process : processes) {
-			process->UpdateArguments(&config, arg);
+			if (!process->UpdateArguments(&config, arg)) {
+				std::cerr << c_errInvalidArg << std::endl;
+				return 1;
+			}
 		}
 	}
+
+	std::cout << " - Running Processes" << std::endl;
 
 	for (const auto& process : processes) {
 		if (!process->ShouldRun(&config)) {

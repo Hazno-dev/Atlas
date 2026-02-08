@@ -4,6 +4,8 @@ export module Atlas.Codegen.Process:Base;
 import Atlas.Codegen;
 import std;
 
+inline constexpr auto c_helpGap = "	";
+
 export namespace Atlas::Codegen
 {
 	class Process
@@ -14,7 +16,7 @@ export namespace Atlas::Codegen
 		public:
 			virtual ~Process() = default;
 
-			ATLAS_NODISCARD virtual constexpr const char* GetHelpArguments() = 0;
+			ATLAS_NODISCARD virtual constexpr void PrintHelpArguments() = 0;
 
 			ATLAS_NODISCARD virtual constexpr bool IsBlocking()
 			{
@@ -26,7 +28,7 @@ export namespace Atlas::Codegen
 				return m_shouldRun;
 			}
 
-			virtual void UpdateArguments(CodegenInstance* instance, const std::string& arg) = 0;
+			virtual bool UpdateArguments(CodegenInstance* instance, const std::string& arg) = 0;
 			virtual void Run(CodegenInstance* instance) = 0;
 	};
 

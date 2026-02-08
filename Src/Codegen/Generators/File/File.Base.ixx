@@ -21,10 +21,15 @@ export namespace Atlas::Codegen
 
 			auto target_path = std::filesystem::path(path);
 			target_path = target_path.replace_extension(".Gen" + target_path.extension().string());
-			std::ofstream output(target_path, std::ios::out | std::ios::trunc);
+			std::filesystem::create_directories(target_path.parent_path());
+
+			std::ofstream output(target_path, std::ios::out | std::ios::binary | std::ios::trunc);
 			if (!output.is_open()) {
 				throw std::runtime_error("Failed to open output file: " + target_path.string());
 			}
+
+			std::cout << "Generating file: " << target_path.string() << std::endl;
+			std::cout << contents << std::endl;
 
 			output << contents;
 			output.flush();

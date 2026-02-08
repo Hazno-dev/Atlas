@@ -7,7 +7,12 @@ import {{ import }};
 
 export namespace Atlas::{{ Namespace }}
 {
-## for Definition in Definitions
-{{ Definition }}
+## for struct in Structs
+{{ struct }}
+
+## endfor
+## for field in Fields
+{{ field }}
+
 ## endfor
 }

@@ -14,14 +14,14 @@ endmacro()
 
 # Module Partition/Interface Units - Any extensions to this should also be reflected in _HEADERS and _IMPLS
 atlas_collect_base_files(ATLAS_SOURCES_MODULES "*.ixx")
-exclude_files(ATLAS_SOURCES_MODULES "Private")
+atlas_exclude_files(ATLAS_SOURCES_MODULES "Private")
 
 atlas_collect_base_files(ATLAS_SOURCES_MODULES_PRIVATE "*/Private/*.ixx")
 atlas_collect_base_files(ATLAS_SOURCES_MODULES_PRIVATE "/Private/*.ixx")
 
 # Headers - Not really used since Atlas uses modules
 atlas_collect_base_files(ATLAS_SOURCES_HEADERS "*.h")
-exclude_files(ATLAS_SOURCES_HEADERS "Private")
+atlas_exclude_files(ATLAS_SOURCES_HEADERS "Private")
 
 atlas_collect_base_files(ATLAS_SOURCES_HEADERS_PRIVATE "*/Private/*.h")
 atlas_collect_base_files(ATLAS_SOURCES_HEADERS_PRIVATE "/Private/*.h")
@@ -30,6 +30,7 @@ atlas_collect_base_files(ATLAS_SOURCES_HEADERS_PRIVATE "/Private/*.h")
 atlas_collect_base_files(ATLAS_SOURCES_IMPLS "*.cpp")
 
 function(atlas_apply_base_sources Target)
+    #PUBLIC MODULES/H
     target_sources(${Target}
             PUBLIC
             FILE_SET public_cxx_modules
@@ -40,6 +41,8 @@ function(atlas_apply_base_sources Target)
             TYPE HEADERS
             BASE_DIRS ${ATLAS_BASE_SOURCES}
             FILES ${ATLAS_SOURCES_HEADERS})
+
+    #PRIVATE MODULES/H
     target_sources(${Target}
             PRIVATE
             FILE_SET private_cxx_modules
@@ -50,10 +53,23 @@ function(atlas_apply_base_sources Target)
             TYPE HEADERS
             BASE_DIRS ${ATLAS_BASE_SOURCES}
             FILES ${ATLAS_SOURCES_HEADERS_PRIVATE})
+
+    #CPP
     target_sources(${Target}
             PRIVATE
             ${ATLAS_SOURCES_IMPLS})
 
-    message("private ixx: ${ATLAS_SOURCES_MODULES_PRIVATE}")
-    message("private headers: ${ATLAS_SOURCES_HEADERS_PRIVATE}")
+    #EXTERNAL MODULES
+
+    #FROZEN -- TEMP FIX UNTIL FROZEN SUPPORTS MODULES PROPERLY
+    target_sources(${Target}
+            PUBLIC
+            FILE_SET CXX_MODULES
+            TYPE CXX_MODULES
+            BASE_DIRS
+            ${CMAKE_CURRENT_SOURCE_DIR}/External/frozen/include
+            ${CMAKE_CURRENT_SOURCE_DIR}/External/frozen/module
+            FILES
+            ${CMAKE_CURRENT_SOURCE_DIR}/External/frozen/module/frozen.cppm
+    )
 endfunction()

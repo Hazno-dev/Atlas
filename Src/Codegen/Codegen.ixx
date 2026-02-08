@@ -5,6 +5,7 @@ module;
 #include <inja/inja.hpp>
 
 export module Atlas.Codegen;
+import Atlas.Resources;
 import std;
 
 export namespace Atlas::Codegen
@@ -18,9 +19,5 @@ export namespace Atlas::Codegen
 		bool IncludeSTUNames = false;
 	};
 
-	inline inja::Environment* GetEnvironment()
-	{
-		static inja::Environment env{};
-		return &env;
-	}
+	inja::Environment* GetEnvironment();
 }

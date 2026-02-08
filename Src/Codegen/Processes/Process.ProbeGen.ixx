@@ -7,7 +7,7 @@ module;
 #include <inja/inja.hpp>
 #include <nlohmann/json.hpp>
 
-export module Atlas.Codegen.Process:Extraction;
+export module Atlas.Codegen.Process:ProbeGen;
 import :Base;
 import Atlas.Codegen.ProbeGen;
 import Atlas.Resources;
@@ -21,28 +21,30 @@ export namespace Atlas::Codegen
 	class ProbeGenProcess : public Process
 	{
 		public:
-			ATLAS_NODISCARD constexpr const char* GetHelpArguments() override
+			ATLAS_NODISCARD constexpr void PrintHelpArguments() override
 			{
-				return "--probe=... -p=... - Set the path to the probe (JSON) source and perform probe generation.";
+				std::cout << c_helpGap << "--probe=... -p=... - Set the path to the probe (JSON) source and perform probe generation." << std::endl;
 			}
 
-			void UpdateArguments(CodegenInstance* instance, const std::string& arg) override
+			bool UpdateArguments(CodegenInstance* instance, const std::string& arg) override
 			{
 				const auto assign_pos = arg.find('=');
-
 				if (const auto command = arg.substr(0, assign_pos + 1); command == "--probe=" || command == "-p=") {
 					instance->BindingPath = arg.substr(assign_pos + 1);
 					if (!std::filesystem::exists(instance->BindingPath)) {
 						std::cerr << "Probe file does not exist: " << instance->BindingPath << std::endl;
-						return;
+						return false;
 					}
 					if (instance->BindingPath.extension() != ".json") {
 						std::cerr << "Probe file must be a .json file: " << instance->BindingPath << std::endl;
-						return;
+						return false;
 					}
 
 					m_shouldRun = true;
+					return true;
 				}
+
+				return true;
 			}
 
 			void Run(CodegenInstance* instance) override
@@ -50,28 +52,6 @@ export namespace Atlas::Codegen
 				std::ifstream file(instance->BindingPath, std::ios::in);
 				if (!file.is_open()) {
 					throw std::runtime_error("Failed to open binding json file: " + instance->BindingPath.string());
-				}
-
-				std::vector<std::string> resource_list{};
-				Resources::ListResources(resource_list, "Templates", ".inja");
-
-				auto env = GetEnvironment();
-				env->add_callback("newline", 0, [] (inja::Arguments& args) {
-					return "\\n";
-				});
-
-				env->set_trim_blocks(true);
-				env->set_throw_at_missing_includes(false);
-				env->set_include_callback([] (const std::filesystem::path&, const std::string& template_name) {
-					const std::string res_content = Resources::LoadResource("Templates/" + template_name);
-					return GetEnvironment()->parse(res_content);
-				});
-
-				for (auto entry : resource_list) {
-					const std::string res_content = Resources::LoadResource(entry);
-					auto templ = env->parse(res_content);
-					entry = entry.substr(std::string("Templates/").length());
-					env->include_template(entry, templ);
 				}
 
 				inja::json jf = nlohmann::ordered_json::parse(file);

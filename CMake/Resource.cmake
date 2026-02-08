@@ -13,7 +13,6 @@ function(atlas_add_resources Target)
     file(GLOB_RECURSE ${TARGET}_RESOURCES CONFIGURE_DEPENDS
             "${CMAKE_CURRENT_SOURCE_DIR}/Resources/${Target}/*")
 
-
     cmrc_add_resources(AtlasResources
             WHENCE "${CMAKE_CURRENT_SOURCE_DIR}/Resources/${Target}"
             ${${TARGET}_RESOURCES})

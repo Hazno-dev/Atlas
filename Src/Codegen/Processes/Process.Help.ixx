@@ -9,9 +9,10 @@ export namespace Atlas::Codegen
 	class HelpProcess : public Process
 	{
 		public:
-			ATLAS_NODISCARD constexpr const char* GetHelpArguments() override
+			ATLAS_NODISCARD constexpr void PrintHelpArguments() override
 			{
-				return "--help, -h - Display this help message.";
+				std::cout << c_helpGap << "--root=..., -r=... - Set the root path for file generation." << std::endl;
+				std::cout << c_helpGap << "--help, -h - Display this help message." << std::endl;
 			}
 
 			ATLAS_NODISCARD constexpr bool IsBlocking() override
@@ -19,20 +20,35 @@ export namespace Atlas::Codegen
 				return true;
 			}
 
-			void UpdateArguments(CodegenInstance* instance, const std::string& arg) override
+			bool UpdateArguments(CodegenInstance* instance, const std::string& arg) override
 			{
 				if (arg == "--help" || arg == "-h") {
 					m_shouldRun = true;
+					return true;
 				}
+
+				const auto assign_pos = arg.find('=');
+				if (const auto command = arg.substr(0, assign_pos + 1); command == "--root=" || command == "-r=") {
+					instance->RepoPath = arg.substr(assign_pos + 1);
+					if (!std::filesystem::exists(instance->RepoPath)) {
+						std::cerr << "Root path does not exist: " << instance->RepoPath << std::endl;
+						return false;
+					}
+					if (!std::filesystem::is_directory(instance->RepoPath)) {
+						std::cerr << "Root path must be a directory: " << instance->RepoPath << std::endl;
+						return false;
+					}
+				}
+
+				return true;
 			}
 
 			void Run(CodegenInstance* instance) override
 			{
 				auto processes = GetProcesses();
-				std::cout << "--- Atlas Codegen" << std::endl << std::endl;
 				std::cout << "  - Arguments:" << std::endl;
 				for (const auto& process : processes) {
-					std::cout << "	" << process->GetHelpArguments() << std::endl;
+					process->PrintHelpArguments();
 				}
 			}
 	};

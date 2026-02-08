@@ -36,8 +36,8 @@ export namespace Atlas::Codegen
 			nlohmann_json_j["Namespace"] = nlohmann_json_t.Namespace;
 			nlohmann_json_j["Imports"] = nlohmann_json_t.Imports;
 
-			nlohmann_json_j["Definitions"] = nlohmann_json_t.Structs;
-			nlohmann_json_j["Definitions"] += nlohmann_json_t.Fields;
+			nlohmann_json_j["Structs"] = nlohmann_json_t.Structs;
+			nlohmann_json_j["Fields"] = nlohmann_json_t.Fields;
 		}
 
 		protected:
