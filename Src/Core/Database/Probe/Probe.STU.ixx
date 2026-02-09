@@ -4,7 +4,7 @@ module;
 
 #include <nlohmann/json.hpp>
 
-export module Atlas.Game.Database.Probe:STU;
+export module Atlas.Database.Probe:STU;
 import :Hex;
 import std;
 import Atlas.Game.STU.RTTI;

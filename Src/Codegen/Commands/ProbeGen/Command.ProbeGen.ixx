@@ -7,18 +7,18 @@ module;
 #include <inja/inja.hpp>
 #include <nlohmann/json.hpp>
 
-export module Atlas.Codegen.Process:ProbeGen;
+export module Atlas.Codegen.Command:ProbeGen;
 import :Base;
 import Atlas.Codegen.ProbeGen;
 import Atlas.Resources;
-import Atlas.Game.Database.Probe;
+import Atlas.Database.Probe;
 
 static_assert(boost::describe::has_describe_members<Atlas::Probe::Data_Root>::value, "FLOP");
 using DataMembers = boost::describe::describe_members<Atlas::Probe::Data_Root, boost::describe::mod_public>;
 
 export namespace Atlas::Codegen
 {
-	class ProbeGenProcess : public Process
+	class ProbeGenProcess : public Command
 	{
 		public:
 			ATLAS_NODISCARD constexpr void PrintHelpArguments() override

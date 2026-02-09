@@ -1,6 +1,6 @@
 // Hazno - 2026
 
-export module Atlas.Codegen.Process:Base;
+export module Atlas.Codegen.Command:Base;
 import Atlas.Codegen;
 import std;
 
@@ -8,13 +8,13 @@ inline constexpr auto c_helpGap = "	";
 
 export namespace Atlas::Codegen
 {
-	class Process
+	class Command
 	{
 		protected:
 			bool m_shouldRun = false;
 
 		public:
-			virtual ~Process() = default;
+			virtual ~Command() = default;
 
 			ATLAS_NODISCARD virtual constexpr void PrintHelpArguments() = 0;
 
@@ -32,9 +32,9 @@ export namespace Atlas::Codegen
 			virtual void Run(CodegenInstance* instance) = 0;
 	};
 
-	inline std::vector<std::shared_ptr<Process>>& GetProcesses()
+	inline std::vector<std::shared_ptr<Command>>& GetCommands()
 	{
-		static std::vector<std::shared_ptr<Process>> processes{};
-		return processes;
+		static std::vector<std::shared_ptr<Command>> commands{};
+		return commands;
 	}
 }

@@ -1,7 +1,7 @@
 // Hazno - 2026
 
 import Atlas.Codegen;
-import Atlas.Codegen.Process;
+import Atlas.Codegen.Command;
 import std;
 
 inline constexpr auto c_errInvalidArg = "Invalid arguments. Use --help for more info.";
@@ -12,8 +12,8 @@ int main(int argc, char* argv[])
 
 	Atlas::Codegen::CodegenInstance config{};
 
-	auto& processes = Atlas::Codegen::GetProcesses();
-	processes.insert(processes.end(), {
+	auto& commands = Atlas::Codegen::GetCommands();
+	commands.insert(commands.end(), {
 			                 std::make_shared<Atlas::Codegen::HelpProcess>(),
 			                 std::make_shared<Atlas::Codegen::STUMetaProcess>(),
 			                 std::make_shared<Atlas::Codegen::ProbeGenProcess>(),
@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 
 	for (int i = 1; i < argc; ++i) {
 		std::string arg = argv[i];
-		for (const auto& process : processes) {
+		for (const auto& process : commands) {
 			if (!process->UpdateArguments(&config, arg)) {
 				std::cerr << c_errInvalidArg << std::endl;
 				return 1;
@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 
 	std::cout << " - Running Processes" << std::endl;
 
-	for (const auto& process : processes) {
+	for (const auto& process : commands) {
 		if (!process->ShouldRun(&config)) {
 			continue;
 		}

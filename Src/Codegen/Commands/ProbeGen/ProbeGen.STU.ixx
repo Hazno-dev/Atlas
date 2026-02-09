@@ -9,7 +9,7 @@ import :Base;
 import Atlas.Codegen;
 import Atlas.Codegen.File;
 import Atlas.Codegen.Definition;
-import Atlas.Game.Database.Probe;
+import Atlas.Database.Probe;
 import Atlas.Resources;
 
 export namespace Atlas::Codegen

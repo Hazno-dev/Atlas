@@ -5,7 +5,7 @@ module;
 #include <nlohmann/json.hpp>
 #include <boost/describe.hpp>
 
-export module Atlas.Game.Database.Probe:Game;
+export module Atlas.Database.Probe:Game;
 import :STU;
 import std;
 

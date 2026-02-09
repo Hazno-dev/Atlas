@@ -1,12 +1,12 @@
 // Hazno - 2026
 
-export module Atlas.Codegen.Process:Help;
+export module Atlas.Codegen.Command:Help;
 import :Base;
 import std;
 
 export namespace Atlas::Codegen
 {
-	class HelpProcess : public Process
+	class HelpProcess : public Command
 	{
 		public:
 			ATLAS_NODISCARD constexpr void PrintHelpArguments() override
@@ -38,6 +38,8 @@ export namespace Atlas::Codegen
 						std::cerr << "Root path must be a directory: " << instance->RepoPath << std::endl;
 						return false;
 					}
+
+					std::filesystem::current_path(instance->RepoPath);
 				}
 
 				return true;
@@ -45,9 +47,9 @@ export namespace Atlas::Codegen
 
 			void Run(CodegenInstance* instance) override
 			{
-				auto processes = GetProcesses();
+				const auto commands = GetCommands();
 				std::cout << "  - Arguments:" << std::endl;
-				for (const auto& process : processes) {
+				for (const auto& process : commands) {
 					process->PrintHelpArguments();
 				}
 			}

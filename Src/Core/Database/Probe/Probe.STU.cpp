@@ -1,6 +1,6 @@
 // Hazno - 2026
 
-module Atlas.Game.Database.Probe;
+module Atlas.Database.Probe;
 import Atlas.Game.STU.RTTI;
 import Atlas.Process;
 
