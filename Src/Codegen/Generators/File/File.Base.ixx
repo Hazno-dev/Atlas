@@ -15,7 +15,7 @@ export namespace Atlas::Codegen
 	{
 		virtual ~GeneratedFile() = default;
 
-		void GenerateToFile(const std::string& path) const
+		void WriteToFile(const std::string& path) const
 		{
 			const auto contents = GenerateContents();
 
@@ -23,13 +23,14 @@ export namespace Atlas::Codegen
 			target_path = target_path.replace_extension(".Gen" + target_path.extension().string());
 			std::filesystem::create_directories(target_path.parent_path());
 
+
+			std::cout << "Generating file: " << target_path.string() << std::endl;
+			//std::cout << contents << std::endl;
+
 			std::ofstream output(target_path, std::ios::out | std::ios::binary | std::ios::trunc);
 			if (!output.is_open()) {
 				throw std::runtime_error("Failed to open output file: " + target_path.string());
 			}
-
-			std::cout << "Generating file: " << target_path.string() << std::endl;
-			std::cout << contents << std::endl;
 
 			output << contents;
 			output.flush();

@@ -9,10 +9,11 @@ export namespace Atlas::{{ Namespace }}
 {
 ## for struct in Structs
 {{ struct }}
-
 ## endfor
 ## for field in Fields
 {{ field }}
-
+## endfor
+## for function in Functions
+{{ function }}
 ## endfor
 }

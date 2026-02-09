@@ -20,6 +20,7 @@ export namespace Atlas::Codegen
 		std::vector<std::string> Imports{};
 		std::vector<StructDefinition> Structs{};
 		std::vector<MemberField> Fields{};
+		std::vector<FunctionDefinition> Functions{};
 
 		explicit ModuleFile(std::string name, std::string name_space) :
 			Name(std::move(name)),
@@ -38,6 +39,7 @@ export namespace Atlas::Codegen
 
 			nlohmann_json_j["Structs"] = nlohmann_json_t.Structs;
 			nlohmann_json_j["Fields"] = nlohmann_json_t.Fields;
+			nlohmann_json_j["Functions"] = nlohmann_json_t.Functions;
 		}
 
 		protected:

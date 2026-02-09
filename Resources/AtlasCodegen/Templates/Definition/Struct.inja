@@ -1,7 +1,10 @@
+## if exists("Comment")
+{{ Comment }}
+## endif
 ## if exists("Template")
 {{ Template }}
 ## endif
-struct {{ Name }} {% if exists("Inheritance") %}: {{ Inheritance }}{% endif %}
+struct {{ Name }} {% if exists("Specifier") %}: {{ Specifier }}{% endif %}
 {
 ## for member in Members
 {{ member }}

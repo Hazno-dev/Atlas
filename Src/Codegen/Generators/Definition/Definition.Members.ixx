@@ -71,7 +71,7 @@ export namespace Atlas::Codegen
 			template <typename BasicJsonType, nlohmann::detail::enable_if_t<nlohmann::detail::is_basic_json<BasicJsonType>::value, int> = 0>
 			friend void to_json(BasicJsonType& nlohmann_json_j, const MemberField& nlohmann_json_t)
 			{
-				static const std::string c_fieldTemplate = Resources::LoadResource("Templates/Member/Field.inja");
+				static const std::string c_fieldTemplate = Resources::LoadResource("Templates/Definition/Member/Field.inja");
 				const auto env = GetEnvironment();
 				nlohmann_json_j = env->render(c_fieldTemplate, nlohmann_json_t.Serialize()).c_str();
 			}

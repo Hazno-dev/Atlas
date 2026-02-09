@@ -1,0 +1,14 @@
+## if exists("Comment")
+{{ Comment }}
+## endif
+## if exists("Template")
+template {{ Template }}
+## endif
+{% if exists("Attributes") %}{{ Attributes }} {% endif %}{{ Return }} {{ Name }}{% if exists("Specialisation") %}{{ Specialisation }}{% endif %}({{ Parameters }}) {% if exists("Specifier") %}: {{ Specifier }}{% endif %}
+## if exists("Body")
+{
+    {{ Body }}
+}
+## else
+;
+## endif
