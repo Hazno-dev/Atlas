@@ -10,21 +10,14 @@ module;
 		return name;																					\
 	}
 
-#define ATLAS_DATABASE_CPT_NO_SPEC(name)																\
-	template <typename TargetDB, typename... Args>														\
-	requires (requires (Atlas::DB::Instance* inst, Args&&... args) {									\
-		inst->template GetDatabase<TargetDB>()->name(std::forward<Args>(args)...);						\
-	} || requires (Args&&... args) {																	\
-		TargetDB::name(std::forward<Args>(args)...);													\
-	})
-
-#define ATLAS_DATABASE_CPT_SPEC(name)																	\
-	template <typename TargetDB, auto Specifier, typename... Args>										\
-	requires (requires(Instance* inst, Args&&... args) {												\
-		inst->template GetDatabase<TargetDB>()->template name<Specifier>(std::forward<Args>(args)...);	\
-	} || requires(Args&&... args) {																		\
-		TargetDB::template name<Specifier>(std::forward<Args>(args)...);								\
-	})
+#define ATLAS_DB_OP(name)																				\
+template <DatabaseType TargetDB, typename... Args> requires requires {\
+GetDB<TargetDB>().template name<TargetDB>(std::declval<Args>()...);\
+}																\
+	constexpr decltype(auto) name(Args&&... args)														\
+	{																									\
+		return GetDB<TargetDB>().template name<TargetDB>(std::forward<Args>(args)...);					\
+	}
 
 export module Atlas.Database:Instance;
 import Atlas.Database.Type;
@@ -33,65 +26,27 @@ import std;
 
 export namespace Atlas::DB
 {
-	/*template <DatabaseType T, typename... Args>
-	concept DatabaseLookup = requires (Args&& args) {
-		{ GetDB<T>::GetSize(value, state) } -> std::convertible_to<u32>;
-		{ GetDB<T>::WriteToBuffer(value, state, buffer) } -> std::same_as<void>;
-	};
-	*/
-
 	class Instance
 	{
+		ATLAS_DEFINE_DATABASE(HashDB, m_hashDatabase, STUHash);
+
 		public:
-			ATLAS_DEFINE_DATABASE(HashDB, m_hashDatabase, STUHash);
-
-			/*
-			ATLAS_DATABASE_CPT_NO_SPEC(Get)
-			constexpr decltype(auto) Get(Args&&... args)
-			{
-				if constexpr (requires { GetDatabase<TargetDB>()->Get(std::forward<Args>(args)...); }) {
-					return GetDatabase<TargetDB>()->Get(std::forward<Args>(args)...);
-				} else if constexpr (requires { TargetDB::Get(std::forward<Args>(args)...); }) {
-					return TargetDB::Get(std::forward<Args>(args)...);
-				}
-			}
-
-			ATLAS_DATABASE_CPT_SPEC(Get)
-			constexpr decltype(auto) Get(Args&&... args)
-			{
-				if constexpr (requires { GetDatabase<TargetDB>()->template Get<Specifier>(std::forward<Args>(args)...); }) {
-					return GetDatabase<TargetDB>()->template Get<Specifier>(std::forward<Args>(args)...);
-				} else if constexpr (requires { TargetDB::template Get<Specifier>(std::forward<Args>(args)...); }) {
-					return TargetDB::template Get<Specifier>(std::forward<Args>(args)...);
-				}
-			}
-			*/
-
-			template <DatabaseType TargetDB, typename... Args> requires requires (Args&&... args) {
-				GetDB<TargetDB>().template Get<TargetDB>(std::forward<Args>(args)...);
-			}
-			constexpr decltype(auto) Get(Args&&... args)
-			{
-				return GetDB<TargetDB>().template Get<TargetDB>(std::forward<Args>(args)...);
-			}
+			ATLAS_DB_OP(Add)
+			ATLAS_DB_OP(Remove)
+			ATLAS_DB_OP(Get)
+			ATLAS_DB_OP(Contains)
 	};
 }
 
 enum struct C { final, import, module };
 
 static_assert(std::is_scoped_enum_v<C> == true);
-static_assert(std::is_scoped_enum_v<Atlas::DB::STUHash> == true);
+static_assert(std::is_same<std::make_unsigned<int32>::type, uint32>::value == true);
 
 static constexpr void test()
 {
 	auto tet = new Atlas::DB::Instance();
-	auto ress = tet->Get<Atlas::DB::STUHash>("G");
-	//ress->GetHash();
-	auto res = tet->Get<Atlas::DB::HashDB, Atlas::DB::HashType::STU>("0x839983982876876");
-	if constexpr (requires { tet->GetDatabase<Atlas::DB::HashDB>()->template Get<Atlas::DB::HashType::STU>("test"); }) {
-		auto res2 = tet->GetDatabase<Atlas::DB::HashDB>()->template Get<Atlas::DB::HashType::STU>("test");
-	}
-	tet->GetDatabase<Atlas::DB::HashDB>()->Get<Atlas::DB::HashType::STU>("test");
+	auto ress = tet->Add<Atlas::DB::STUHash>("45344", "Helo", 0x353, Atlas::VersionBounds(1, 100));
 }
 
 /*public:

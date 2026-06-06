@@ -5,7 +5,7 @@ module;
 #define ATLAS_DEFINE_HASHMAP(type, name)																	\
 	HashDataMap<type> name;																					\
 	template <DatabaseType T> requires T == type															\
-	constexpr const HashDataMap<type>& GetDatabase() const													\
+	constexpr HashDataMap<type>& GetDatabase()													\
 	{																										\
 		return name;																						\
 	}
@@ -24,52 +24,28 @@ export namespace Atlas::DB
 			ATLAS_DEFINE_HASHMAP(STUHash, m_stuHash);
 
 		public:
-			/*template <DatabaseType T> requires T == STUHash
-			DataRef<HashData<T>> Get(uint32 hash)
+			template <DatabaseType T, typename... Args>
+			bool Add(Args&&... args) requires requires (Args&&... args) { GetDatabase<T>().Add(std::forward<Args>(args)...); }
 			{
-				const auto& hashMap = GetDatabase<T>();
-				auto it = hashMap.find(hash);
-				if (it != hashMap.end()) {
-					return {it->second};
-				}
-
-				return {};
-			}
-
-			template <DatabaseType T> requires T == STUHash
-			DataRef<HashData<T>> Get(std::string_view str)
-			{
-				const auto& hashMap = GetDatabase<T>();
-				const auto hash = std::hash<std::string_view>{}(str);
-				auto it = hashMap.find(hash);
-				if (it != hashMap.end()) {
-					return {it->second};
-				}
-
-				return {};
+				return GetDatabase<T>().Add(std::forward<Args>(args)...);
 			}
 
 			template <DatabaseType T, typename Arg>
-			constexpr DataRef<HashData<T>> Get(Arg&& arg)
+			bool Remove(Arg&& arg) requires requires (Arg&& arg) { GetDatabase<T>().Remove(std::forward<Arg>(arg)); }
 			{
-				if constexpr (std::is_same_v<std::decay_t<Arg>, std::string_view>) {
-					return {GetDatabase<T>()->GetHashData(std::forward<Arg>(arg))};
-				} else if constexpr (std::is_integral_v<std::decay_t<Arg>>) {
-					return {GetDatabase<T>()->GetHashData(static_cast<uint64>(arg))};
-				} else {
-					static_assert(false, "Unsupported lookup type");
-					return {};
-				}
-			}*/
-			template <DatabaseType T, typename Arg>
-			constexpr DataRef<HashData<T>> Get(Arg&& arg)
-			{
-				if constexpr (std::same_as<std::make_unsigned<std::decay_t<Arg>>, uint64>
-					|| std::same_as<std::make_unsigned<std::decay_t<Arg>>, uint32>) {
-					return {GetDatabase<T>().GetHashData(static_cast<uint64>(arg))};
-				}
+				return GetDatabase<T>().Remove(std::forward<Arg>(arg));
+			}
 
-				return {GetDatabase<T>().GetHashData(std::forward<Arg>(arg))};
+			template <DatabaseType T, typename Arg>
+			DataRef<HashData<T>> Get(Arg&& arg) requires requires (Arg&& arg) { GetDatabase<T>().Get(std::forward<Arg>(arg)); }
+			{
+				return {GetDatabase<T>().Get(std::forward<Arg>(arg))};
+			}
+
+			template <DatabaseType T, typename Arg>
+			bool Contains(Arg&& arg) const requires requires (Arg&& arg) { GetDatabase<T>().Contains(std::forward<Arg>(arg)); }
+			{
+				return GetDatabase<T>().Contains(std::forward<Arg>(arg));
 			}
 	};
 }
