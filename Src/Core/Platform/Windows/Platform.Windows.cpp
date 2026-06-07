@@ -11,7 +11,7 @@ module;
 #include <TlHelp32.h>
 
 #include "Common/Private/Common.Macros.h"
-#include "Private/Platform.Windows.h"
+#include "../Private/Platform.Windows.h"
 
 #undef LoadLibrary
 #undef GetModuleHandle

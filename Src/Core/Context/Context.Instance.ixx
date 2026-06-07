@@ -1,15 +1,15 @@
 // Hazno - 2026
 
 export module Atlas.Context:Instance;
+import :Platform;
 import Atlas.Common;
 import std;
 
 export namespace Atlas
 {
-	class Context
+	struct Context
 	{
-		public:
-			const std::string Path;
-			const uint32 Version;
+		const uint32 Version;
+		const Platform Platform;
 	};
 }

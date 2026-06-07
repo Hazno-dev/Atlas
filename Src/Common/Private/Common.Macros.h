@@ -58,5 +58,9 @@ template <typename t_ret, typename t_alias> concept OutputConvertible =
 #define EXPORT_ALIAS_CONVERT(...)                                                           \
     ATLAS_GET_MACRO_4(x, DTL_EXPORT_ALIAS_CONVERT_W, DTL_EXPORT_ALIAS_CONVERT, x, __VA_ARGS__)(__VA_ARGS__)
 
+#define ADD_TYPENAME(...) typename __VA_ARGS__
 #define EXPORT_CONCEPT(name, types, ...)													\
+	export template<ATLAS_FOR_EACH(ADD_TYPENAME, ATLAS_UNPARENS(types))> concept name = __VA_ARGS__;
+
+#define EXPORT_CONCEPT_MANUAL(name, types, ...)													\
 	export template<ATLAS_UNPARENS(types)> concept name = __VA_ARGS__;

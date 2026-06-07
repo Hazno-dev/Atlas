@@ -3,6 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Atlas.iml" filepath="$PROJECT_DIR$/.idea/Atlas.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/custom.iml" filepath="$PROJECT_DIR$/.idea/custom.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/custom@4.iml" filepath="$PROJECT_DIR$/.idea/custom@4.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/peg_generator.iml" filepath="$PROJECT_DIR$/.idea/peg_generator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/peg_generator@3.iml" filepath="$PROJECT_DIR$/.idea/peg_generator@3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/peg_generator@5.iml" filepath="$PROJECT_DIR$/.idea/peg_generator@5.iml" />
     </modules>
   </component>
 </project>

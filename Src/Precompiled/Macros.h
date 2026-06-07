@@ -25,9 +25,30 @@
  */
 #define ATLAS_PADDING(size) uint8 DTL_ATLAS_MERGE_WRAP(pad, __COUNTER__)[size]
 
-#define ATLAS_FOR_EACH(macro, ...) DTL_ATLAS_FOR_EACH(macro, __VA_ARGS__)
+/*
+ * Concatenates the arguments together using the specified separator
+ *
+ * Example
+ * ATLAS_JOIN(||, Hello, World) -> Hello || Worlds
+ */
+#define ATLAS_JOIN(separator, ...) DTL_ATLAS_FOR_EACH(DTL_ATLAS_EXPAND, (separator), __VA_ARGS__)
 
-#define ATLAS_UNPARENS(args) DTL_ATLAS_UNPARENS(args)
+/*
+ * Performs the provided macro on the arguments. Returns a comma separated list
+ *
+ * Example
+ * #Define Foo(X) X+2
+ * ATLAS_FOR_EACH(Foo, 2, 4, 6) -> 2+2, 2+4, 2+6
+ */
+#define ATLAS_FOR_EACH(macro, ...) DTL_ATLAS_FOR_EACH(macro, (DTL_ATLAS_FOR_EACH_SEPERATOR), __VA_ARGS__)
+
+/*
+ * Removes parenthesis from the provided input
+ *
+ * Example
+ * ATLAS_UNPARENS((One, Two, Three)) -> One, Two, Three
+ */
+#define ATLAS_UNPARENS(...) DTL_ATLAS_UNPARENS __VA_ARGS__
 
 /*
  * Define a stub function returning specified type
@@ -88,17 +109,20 @@
 #define DTL_ATLAS_EXPAND2(...) DTL_ATLAS_EXPAND1(DTL_ATLAS_EXPAND1(DTL_ATLAS_EXPAND1(DTL_ATLAS_EXPAND1(__VA_ARGS__))))
 #define DTL_ATLAS_EXPAND1(...) __VA_ARGS__
 
-#define DTL_ATLAS_FOR_EACH(macro, ...)										\
-	__VA_OPT__(DTL_ATLAS_EXPAND0(DTL_ATLAS_FOR_EACH_HELPER(macro, __VA_ARGS__)))
+#define DTL_ATLAS_FOR_EACH(macro, separator, ...)										\
+	__VA_OPT__(DTL_ATLAS_EXPAND0(DTL_ATLAS_FOR_EACH_HELPER(macro, separator, __VA_ARGS__)))
 
-#define DTL_ATLAS_FOR_EACH_HELPER(macro, a1, ...)								\
-	macro a1														\
-	__VA_OPT__(, DTL_ATLAS_FOR_EACH_AGAIN DTL_ATLAS_PARENS (macro, __VA_ARGS__))
+#define DTL_ATLAS_FOR_EACH_HELPER(macro, separator, a1, ...)								\
+	macro(a1)														\
+	__VA_OPT__(ATLAS_UNPARENS(separator) DTL_ATLAS_FOR_EACH_AGAIN DTL_ATLAS_PARENS (macro, separator, __VA_ARGS__))
 
 #define DTL_ATLAS_FOR_EACH_AGAIN() DTL_ATLAS_FOR_EACH_HELPER
+
+#define DTL_ATLAS_FOR_EACH_SEPERATOR ,
 
 //Unparent impl
 //From https://stackoverflow.com/a/46311121
 
-#define DTL_ATLAS_REALLY_UNPARENS(...) ATLAS_FOR_EACH(typename , __VA_ARGS__)
-#define DTL_ATLAS_UNPARENS(args) DTL_ATLAS_EXPAND(DTL_ATLAS_REALLY_UNPARENS args)
+//#define DTL_ATLAS_REALLY_UNPARENS(macro, ...) ATLAS_FOR_EACH(macro, __VA_ARGS__)
+//#define DTL_ATLAS_UNPARENS(macro, args) DTL_ATLAS_EXPAND(DTL_ATLAS_REALLY_UNPARENS(macro, DTL_ATLAS_UNPARENS_ARGS args))
+#define DTL_ATLAS_UNPARENS(...) __VA_ARGS__

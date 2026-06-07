@@ -3,10 +3,13 @@
     "boost-core",
     "boost-describe",
     "boost-mp11",
+    "boost-program-options",
     "cmakerc",
+    "fast-cpp-csv-parser",
     "inja",
     "nlohmann-json",
     "spdlog",
-    "fast-cpp-csv-parser"
+    "vincentlaucsb-csv-parser",
+    "boost-hash2"
   ]
 }

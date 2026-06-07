@@ -10,11 +10,7 @@ export namespace Atlas::Resources
 	void ListResources(std::vector<std::string>& targetList, const std::string& directory, const std::string& extension_filter = "");
 
 	template <typename t_ret>
-	t_ret LoadResource(const std::string& path)
-	{
-		static_assert(sizeof(t_ret) == 0, "LoadResource is not specialized for this type");
-		return nullptr;
-	}
+	t_ret LoadResource(const std::string& path) = delete;
 
 	std::string LoadResource(const std::string& path);
 }

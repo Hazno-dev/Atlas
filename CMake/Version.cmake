@@ -9,13 +9,15 @@ macro(atlas_project_version Target Major Minor Patch Tweak)
 
     target_compile_definitions(${Target} PRIVATE
             ${TARGET_DEF}=1
+            ${CMAKE_BUILD_TYPE}=1
             VERSION=${Major},${Minor},${Patch},${Tweak}
             VERSION_STRING="${Major}.${Minor}.${Patch}.${Tweak}"
             VERSION_MAJOR=${Major}
             VERSION_MINOR=${Minor}
             VERSION_PATCH=${Patch}
             VERSION_TWEAK=${Tweak}
-            BUILD_TYPE="${CMAKE_BUILD_TYPE}")
+            BUILD_TYPE="${CMAKE_BUILD_TYPE}"
+    )
 
     set(${TARGET_DEF}=1
             VERSION=${Major},${Minor},${Patch},${Tweak}

@@ -24,6 +24,10 @@ export namespace Atlas::DB
 			VersionBounds m_versionBounds;
 
 		public:
+			HashData(std::string text, const uint64 value) :
+				m_hash(value),
+				m_text(std::move(text)) {}
+
 			HashData(std::string text, std::string description, const uint64 value) :
 				m_hash(value),
 				m_text(std::move(text)),

@@ -22,12 +22,8 @@ namespace Atlas::Resources
 
 	void ListResources(std::vector<std::string>& targetList, const std::string& directory, const std::string& extension_filter)
 	{
-		if (!s_filesystem.exists(directory)) {
-			throw std::runtime_error("Resource directory does not exist: " + directory);
-		}
-
-		if (!s_filesystem.is_directory(directory)) {
-			throw std::runtime_error("Resource directory not found: " + directory);
+		if (!DirectoryExists(directory)) {
+			throw std::runtime_error("(AtlasResources) Failed to List Resources. Directory does not exist: " + directory);
 		}
 
 		for (const auto& entry : s_filesystem.iterate_directory(directory)) {
@@ -43,12 +39,8 @@ namespace Atlas::Resources
 
 	std::string LoadResource(const std::string& path)
 	{
-		if (!s_filesystem.exists(path)) {
-			throw std::runtime_error("Resource path does not exist: " + path);
-		}
-
-		if (!s_filesystem.is_file(path)) {
-			throw std::runtime_error("Resource not found: " + path);
+		if (!ResourceExists(path)) {
+			throw std::runtime_error("(AtlasResources) Failed to Load Resource. File does not exist: " + path);
 		}
 
 		const auto file = s_filesystem.open(path);

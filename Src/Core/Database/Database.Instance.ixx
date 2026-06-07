@@ -45,8 +45,18 @@ static_assert(std::is_same<std::make_unsigned<int32>::type, uint32>::value == tr
 
 static constexpr void test()
 {
-	auto tet = new Atlas::DB::Instance();
-	auto ress = tet->Add<Atlas::DB::STUHash>("45344", "Helo", 0x353, Atlas::VersionBounds(1, 100));
+	auto db = new Atlas::DB::Instance(); //ignore
+
+
+	auto didAdd = db->Add<Atlas::DB::STUHash>("STUSomething", 0x8338787);
+	didAdd = db->Add<Atlas::DB::STUHash>("STUSomething", "My Description", 0x8338787);
+	didAdd = db->Add<Atlas::DB::STUHash>("STUSomething", "My Description", 0x8338787, Atlas::VersionBounds(13824, 0));
+	auto myStu = db->Get<Atlas::DB::STUHash>(0x8338787);
+	auto myStuByString = db->Get<Atlas::DB::STUHash>("STUSomething");
+	auto hasMyStu = db->Contains<Atlas::DB::STUHash>(0x8338787);
+	auto hasMyStuByString = db->Contains<Atlas::DB::STUHash>("STUSomething");
+	auto didRemoveByHash = db->Remove<Atlas::DB::STUHash>(0x8338787);
+	auto didRemoveByString = db->Remove<Atlas::DB::STUHash>("STUSomething");
 }
 
 /*public:

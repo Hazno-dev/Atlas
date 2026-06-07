@@ -47,13 +47,17 @@ target_link_libraries(AtlasCodegen PRIVATE nlohmann_json::nlohmann_json)
 find_package(inja CONFIG REQUIRED)
 target_link_libraries(AtlasCodegen PRIVATE pantor::inja)
 
-find_package(Boost REQUIRED QUIET COMPONENTS core mp11 describe)
+find_package(Boost REQUIRED QUIET COMPONENTS core mp11 describe program_options)
 target_link_libraries(AtlasCodegen PRIVATE ${Boost_LIBRARIES})
+
+find_package(unofficial-vincentlaucsb-csv-parser CONFIG REQUIRED)
+target_link_libraries(AtlasCodegen PRIVATE unofficial::vincentlaucsb-csv-parser::csv)
 
 target_link_libraries(AtlasCodegen PRIVATE frozen::frozen)
 
 find_path(FAST_CPP_CSV_PARSER_INCLUDE_DIRS "fast-cpp-csv-parser/csv.h")
 target_include_directories(AtlasCodegen PRIVATE ${FAST_CPP_CSV_PARSER_INCLUDE_DIRS})
+
 
 atlas_apply_target_base(AtlasCodegen)
 atlas_add_resources(AtlasCodegen)

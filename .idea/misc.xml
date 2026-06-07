@@ -9,6 +9,7 @@
       <file path="$PROJECT_DIR$/Build" />
       <file path="$PROJECT_DIR$/External/embed" />
       <file path="$PROJECT_DIR$/External/fmt" />
+      <file path="$PROJECT_DIR$/External/frozen" />
       <file path="$PROJECT_DIR$/External/vcpkg" />
     </excludeRoots>
   </component>
